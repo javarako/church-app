@@ -6,11 +6,16 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+
+import com.javarako.akuc.util.GroupCode;
+import com.javarako.akuc.util.LocationCode;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -48,6 +53,10 @@ public class Member extends AuditModel {
 	@Column(unique = true)
 	private Integer offeringNumber;
 	private String comment;
+	@Enumerated(EnumType.STRING)
+	private LocationCode locationCode;
+	@Enumerated(EnumType.STRING)
+	private GroupCode groupCode;
 	
 	@OneToMany(targetEntity = Address.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "member_id")
