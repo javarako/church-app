@@ -1,5 +1,6 @@
 package com.javarako.akuc.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,6 +58,7 @@ public class Member extends AuditModel {
 	private LocationCode locationCode;
 	@Enumerated(EnumType.STRING)
 	private GroupCode groupCode;
+	private Date birthDate;
 	
 	@OneToMany(targetEntity = Address.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "member_id")
