@@ -1,0 +1,37 @@
+1,OFFERING_TYPE,Weekly,Regular Weekly Offering
+2,OFFERING_TYPE,MS_fund,Mission and Service (M & S)
+3,OFFERING_TYPE,Loose,Loose Offering
+4,OFFERING_TYPE,Thanks,Thanks
+5,OFFERING_TYPE,Tithe,Tithe
+6,OFFERING_TYPE,Easter,Easter
+7,OFFERING_TYPE,Anniversary,Anniversary
+8,OFFERING_TYPE,Thanksgiving,Thanksgiving
+9,OFFERING_TYPE,Christmas,Christmas
+10,OFFERING_TYPE,Canvass,Canvass
+11,OFFERING_TYPE,Initial,Initial Offering
+12,OFFERING_TYPE,Group_Contr,Group Contribution
+13,OFFERING_TYPE,Miscellaneous,Miscellaneous
+14,OFFERING_TYPE,Fellowship,Fellowship
+15,OFFERING_TYPE,Visitor,Visitor
+16,OFFERING_TYPE,Summer_Camp,Summer Camp
+17,OFFERING_TYPE,KL_Grant,Korean Language Grant
+18,OFFERING_TYPE,UC_Grant,United Church Grant
+19,OFFERING_TYPE,Designated,Designated fund 
+20,OFFERING_TYPE,Trustee,Trustee Transfers
+21,AMOUNT_TYPE,Cash,Cash
+22,AMOUNT_TYPE,Cheque,Cheque
+23,AMOUNT_TYPE,CreditCard,Credit Card
+24,AMOUNT_TYPE,eTransfer,eTransfer
+25,AMOUNT_TYPE,Coin,Coin
+26,LOCATION_CODE,Location_1,1 구역
+27,LOCATION_CODE,Location_2,2 구역
+28,LOCATION_CODE,Location_3,3 구역
+29,LOCATION_CODE,Location_4,4 구역
+30,LOCATION_CODE,Location_5,5 구역
+31,LOCATION_CODE,Location_6,6 구역
+32,GROUP_CODE,Samaritan,Samaritan
+33,GROUP_CODE,Emmao,Emmao
+34,GROUP_CODE,John,John
+35,GROUP_CODE,Joseph,Joseph
+36,GROUP_CODE,Jonah,Jonah
+37,GROUP_CODE,SundaySchool,Sunday School

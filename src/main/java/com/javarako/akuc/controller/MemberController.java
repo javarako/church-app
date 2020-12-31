@@ -43,7 +43,6 @@ public class MemberController {
 	@Autowired
 	OfferingArchiveRepository offeringArchiveRepository;
 
-
 	@GetMapping("/members")
 	public ResponseEntity<Map<String, Object>> getAll(@RequestParam(required = false) String name,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
@@ -57,7 +56,9 @@ public class MemberController {
 			if (Strings.isEmpty(name)) {
 				members = memberRepository.findAll(pageable);
 			} else {
-				members = memberRepository.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCase(name, name, pageable);
+				members = memberRepository
+						.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCaseOrSpouseNameContainsIgnoreCaseOrSpouseNickNameContainsIgnoreCase(
+								name, name, name, name, pageable);
 			}
 
 			Map<String, Object> response = new HashMap<>();
@@ -88,13 +89,11 @@ public class MemberController {
 		Calendar start = new GregorianCalendar(year, 0, 1);
 		Calendar end = new GregorianCalendar(year, 11, 31);
 		SimpleDateFormat yyyyMMDD = new SimpleDateFormat("yyyyMMdd");
-		
-		offeringArchiveRepository.getOfferingArchiving(
-					offeringNumber, 
-					yyyyMMDD.format(start.getTime()), 
-					yyyyMMDD.format(end.getTime()));
+
+		offeringArchiveRepository.getOfferingArchiving(offeringNumber, yyyyMMDD.format(start.getTime()),
+				yyyyMMDD.format(end.getTime()));
 	}
-	
+
 	@PostMapping("/members")
 	public Member create(@RequestBody Member member) {
 		return memberRepository.save(member);
@@ -115,11 +114,11 @@ public class MemberController {
 		if (member.getOfferingNumber() != null) {
 			if (memberRepository.findByOfferingNumber(member.getOfferingNumber()) != null) {
 				throw new ApiResponseException(
-						"Offering # " + member.getOfferingNumber() + " already occupied! Back to previous #"
-						, HttpStatus.BAD_REQUEST);
+						"Offering # " + member.getOfferingNumber() + " already occupied! Back to previous #",
+						HttpStatus.BAD_REQUEST);
 			}
 		}
-		
+
 		return memberRepository.save(member);
 	}
 

@@ -69,7 +69,7 @@ public class MemberRepositoryTest {
 		Optional<Member> existingMember = memberRepository.findById(newMember.getMemberId());
 		assertThat(existingMember.get()).isNotNull();
 
-		Page<Member> nonExistingMember = memberRepository.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCase("superman", "superman", null);
+		Page<Member> nonExistingMember = memberRepository.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCaseOrSpouseNameContainsIgnoreCaseOrSpouseNickNameContainsIgnoreCase("superman", "superman", "superman", "superman", null);
 		assertThat(nonExistingMember.getTotalElements()).isEqualTo(0);
 	}
 
@@ -82,7 +82,7 @@ public class MemberRepositoryTest {
 		Member newMember = memberRepository.save(member);
 		assertThat(newMember).isNotNull();
 		
-		Page<Member> existingMember_name = memberRepository.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCase("nam", "nam", null);
+		Page<Member> existingMember_name = memberRepository.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCaseOrSpouseNameContainsIgnoreCaseOrSpouseNickNameContainsIgnoreCase("nam", "nam", "nam", "nam", null);
 		assertThat(existingMember_name.getTotalElements()).isEqualTo(1);
 	}
 	
@@ -95,7 +95,7 @@ public class MemberRepositoryTest {
 		Member newMember = memberRepository.save(member);
 		assertThat(newMember).isNotNull();
 		
-		Page<Member> existingMember_nick = memberRepository.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCase("nic", "nic", null);
+		Page<Member> existingMember_nick = memberRepository.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCaseOrSpouseNameContainsIgnoreCaseOrSpouseNickNameContainsIgnoreCase("nic", "nic", "nic", "nic", null);
 		assertThat(existingMember_nick.getTotalElements()).isEqualTo(1);
 	}
 
@@ -134,7 +134,7 @@ public class MemberRepositoryTest {
 		Optional<Member> existingMember = memberRepository.findById(newMember.getMemberId());
 		assertThat(existingMember.get()).isNotNull();
 
-		Page<Member> nonExistingMember = memberRepository.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCase("superman", "superman", null);
+		Page<Member> nonExistingMember = memberRepository.findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCaseOrSpouseNameContainsIgnoreCaseOrSpouseNickNameContainsIgnoreCase("superman", "superman", "superman", "superman", null);
 		assertThat(nonExistingMember.getTotalElements()).isEqualTo(0);	
 	}
 

@@ -49,6 +49,8 @@ public class Member extends AuditModel {
 
 	private String name;
 	private String nickName;
+	private String spouseName;
+	private String spouseNickName;
 	private String primaryEmail;
 	private String secondaryEmail;
 	@Column(unique = true)
@@ -59,6 +61,7 @@ public class Member extends AuditModel {
 	@Enumerated(EnumType.STRING)
 	private GroupCode groupCode;
 	private Date birthDate;
+	private Date spouseBirthDate;
 	
 	@OneToMany(targetEntity = Address.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "member_id")

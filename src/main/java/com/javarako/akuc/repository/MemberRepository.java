@@ -8,8 +8,8 @@ import com.javarako.akuc.model.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-	Page<Member> findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCase(
-			String name, String nickName, Pageable pageable);
+	Page<Member> findByNameContainsIgnoreCaseOrNickNameContainsIgnoreCaseOrSpouseNameContainsIgnoreCaseOrSpouseNickNameContainsIgnoreCase(
+			String name, String nickName, String spouseName, String spouseNickName, Pageable pageable);
 
 	Member findByOfferingNumber(Integer offeringNumber);
 }

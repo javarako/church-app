@@ -42,7 +42,7 @@ public class Phone extends AuditModel {
 	private PhoneType type;
 	private Integer countryCode;
 	private String number;
-	private Integer extension;
+	private String reference;
 	
     @ManyToOne(fetch = FetchType.LAZY)
 	private Member member;
