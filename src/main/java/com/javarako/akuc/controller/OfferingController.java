@@ -74,8 +74,17 @@ public class OfferingController {
 
 	@PostMapping("/offerings")
 	public Offering create(@RequestBody Offering offering) {
-		log.info(offering.toString());
-		return offeringRepository.save(offering);
+		try {
+			log.info(offering.toString());
+			return offeringRepository.save(offering);			
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			if (e.getCause() != null && e.getCause().getCause() != null) {
+				throw new ApiResponseException(e.getCause().getCause().getMessage(), HttpStatus.BAD_REQUEST);
+			} else {
+				throw new ApiResponseException(offering.getOfferingNumber() + " not saved due to " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
 	}
 
 	@PutMapping("/offerings/{id}")

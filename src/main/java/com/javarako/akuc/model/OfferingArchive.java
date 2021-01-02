@@ -3,14 +3,9 @@ package com.javarako.akuc.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.javarako.akuc.util.AmountType;
-import com.javarako.akuc.util.OfferingType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -53,10 +48,8 @@ public class OfferingArchive extends AuditModel {
 	private Date offeringDate;
 	private Date offeringSunday;
 	private Long offeringNumber;
-	@Enumerated(EnumType.STRING)
-	private OfferingType offeringType;
-	@Enumerated(EnumType.STRING)
-	private AmountType amountType;
+	private String offeringType;
+	private String amountType;
 	private Double amount;
 
 }

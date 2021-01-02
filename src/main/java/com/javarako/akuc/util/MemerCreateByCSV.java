@@ -122,20 +122,20 @@ public class MemerCreateByCSV {
 		return member;
 	}
 	
-	private LocationCode getLocationCode(String str) {
+	private String getLocationCode(String str) {
 		switch (str) {
 		case "1구역":
-			return LocationCode.Location_1;
+			return "Location_1";
 		case "2구역":
-			return LocationCode.Location_2;
+			return "Location_2";
 		case "3구역":
-			return LocationCode.Location_3;
+			return "Location_3";
 		case "4구역":
-			return LocationCode.Location_4;
+			return "Location_4";
 		case "5구역":
-			return LocationCode.Location_5;
+			return "Location_5";
 		case "6구역":
-			return LocationCode.Location_6;
+			return "Location_6";
 
 		default:
 			return null;
@@ -143,7 +143,7 @@ public class MemerCreateByCSV {
 	}
 	
 	private List<String> convertList() {
-	    String fileName = "C:\\Works\\projects\\church-app\\src\\test\\java\\com\\javarako\\akuc\\util\\member_sample.csv";
+	    String fileName = "C:\\Works\\projects\\church-app\\src\\test\\java\\com\\javarako\\akuc\\util\\member_all.csv";
 
         List<String> list = new ArrayList<>();
 

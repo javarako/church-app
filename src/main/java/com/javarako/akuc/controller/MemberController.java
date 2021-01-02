@@ -46,7 +46,7 @@ public class MemberController {
 	@GetMapping("/members")
 	public ResponseEntity<Map<String, Object>> getAll(@RequestParam(required = false) String name,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
-			@RequestParam(defaultValue = "name") String sortBy) {
+			@RequestParam(defaultValue = "nickName") String sortBy) {
 
 		log.info("/members?name={}", name);
 
