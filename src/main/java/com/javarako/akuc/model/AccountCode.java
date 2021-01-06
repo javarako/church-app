@@ -34,6 +34,7 @@ public class AccountCode extends AuditModel {
 	private String code;
 	private String item;
 	private String fundType;
+	private String committeeCode;
 	private String committee;
 
 }

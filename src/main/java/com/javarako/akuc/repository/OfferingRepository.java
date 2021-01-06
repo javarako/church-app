@@ -13,8 +13,8 @@ public interface OfferingRepository extends JpaRepository<Offering, Long> {
 
 	Page<Offering> findByOfferingSunday(Date offeringSunday, Pageable pageable);
 	Page<Offering> findByOfferingSundayBetween(Date start, Date end, Pageable pageable);
-	Page<Offering> findByofferingNumber(Long offeringNumber, Pageable pageable);
-	Page<Offering> findByofferingNumberAndOfferingSundayBetween(Long offeringNumber, Date start, Date end, Pageable pageable);
-	List<Offering> findByofferingNumberAndOfferingSundayBetween(Integer offeringNumber, Date start, Date end);
+	Page<Offering> findByOfferingNumber(Long offeringNumber, Pageable pageable);
+	Page<Offering> findByOfferingNumberAndOfferingSundayBetween(Long offeringNumber, Date start, Date end, Pageable pageable);
+	List<Offering> findByOfferingNumberAndOfferingSundayBetween(Integer offeringNumber, Date start, Date end);
 
 }

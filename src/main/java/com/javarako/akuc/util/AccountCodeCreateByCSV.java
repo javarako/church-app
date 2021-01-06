@@ -46,10 +46,11 @@ public class AccountCodeCreateByCSV {
 	//1.일반회계 / GENERAL FUND,	01.목회인사 위원회,	01-5111-001,	목회자 사례비
 	private AccountCode getAccountCode(String[] fields) {
 		AccountCode accountCode = new AccountCode();
-		accountCode.setCode(fields[2].trim());
-		accountCode.setItem(fields[3].trim());
+		accountCode.setCode(fields[3].trim());
+		accountCode.setItem(fields[4].trim());
 		accountCode.setFundType(fields[0].trim());
-		accountCode.setCommittee(fields[1].trim());
+		accountCode.setCommitteeCode(fields[1].trim());
+		accountCode.setCommittee(fields[2].trim());
 		return accountCode;
 	}
 	
