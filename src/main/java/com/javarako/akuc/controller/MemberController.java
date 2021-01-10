@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,21 +36,21 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/secure")
 public class MemberController {
 
 	@Autowired
 	MemberRepository memberRepository;
 	@Autowired
 	OfferingArchiveRepository offeringArchiveRepository;
-
+	
 	@GetMapping("/members")
+	@PreAuthorize("hasRole('ROLE_MEMBERSHIP') or hasRole('ROLE_TREASURER')")
 	public ResponseEntity<Map<String, Object>> getAll(@RequestParam(required = false) String name,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "nickName") String sortBy) {
 
 		log.info("/members?name={}", name);
-
 		try {
 			Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 			Page<Member> members;
@@ -83,6 +84,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/members/offeringArchive")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public void getOfferingArchive(@RequestParam(required = true) int offeringNumber,
 			@RequestParam(required = true) int year) {
 
@@ -95,13 +97,13 @@ public class MemberController {
 	}
 
 	@PostMapping("/members")
+	@PreAuthorize("hasRole('ROLE_MEMBERSHIP') or hasRole('ROLE_USER')")
 	public Member create(@RequestBody Member member) {
 		return memberRepository.save(member);
 	}
 
 	@PutMapping("/members/{id}")
 	public Member update(@PathVariable("id") long id, @RequestBody Member member) {
-
 		return memberRepository.findById(id).map(existingMember -> {
 			member.setMemberId(existingMember.getMemberId());
 			return memberRepository.save(member);
@@ -109,6 +111,7 @@ public class MemberController {
 	}
 
 	@PutMapping("/members/offeringNumber")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public Member updateOfferingNumber(@RequestBody Member member) {
 
 		if (member.getOfferingNumber() != null) {
@@ -123,12 +126,14 @@ public class MemberController {
 	}
 
 	@DeleteMapping("/members/{id}")
+	@PreAuthorize("hasRole('ROLE_MEMBERSHIP')")
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") long id) {
 		memberRepository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@DeleteMapping("/members")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<HttpStatus> deleteAll() {
 		memberRepository.deleteAll();
 		return new ResponseEntity<>(HttpStatus.OK);

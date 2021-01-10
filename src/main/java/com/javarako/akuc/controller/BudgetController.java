@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/secure")
 public class BudgetController {
 
 	@Autowired
@@ -43,6 +44,7 @@ public class BudgetController {
 	}
 
 	@PostMapping("/budgets")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Budget create(@RequestBody Budget budget) {
 		log.info(budget.toString());
 		budgetRepository.findByYearAndAccountCodeCode(budget.getYear(), budget.getAccountCode().getCode())
@@ -67,6 +69,7 @@ public class BudgetController {
 
 	@Transactional
 	@PostMapping("/budgets/{year}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public List<Budget> upload(@PathVariable("year") int year, @RequestBody List<Budget> budgets) {
 		try {
 			log.info(year + " budget upload!");
@@ -85,6 +88,7 @@ public class BudgetController {
 	}
 
 	@PutMapping("/budgets/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Budget update(@PathVariable("id") long id, @RequestBody Budget budget) {
 
 		return budgetRepository.findById(id).map(existingBudget -> {
@@ -94,12 +98,14 @@ public class BudgetController {
 	}
 
 	@DeleteMapping("/budgets/{id}")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") long id) {
 		budgetRepository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@DeleteMapping("/budgets")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<HttpStatus> deleteAll() {
 		budgetRepository.deleteAll();
 		return new ResponseEntity<>(HttpStatus.OK);

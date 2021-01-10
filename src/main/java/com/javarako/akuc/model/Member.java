@@ -46,6 +46,8 @@ public class Member extends AuditModel {
 	private String nickName;
 	private String spouseName;
 	private String spouseNickName;
+	private String password;
+	//@Column(unique = true)
 	private String primaryEmail;
 	private String secondaryEmail;
 	@Column(unique = true)
@@ -63,4 +65,9 @@ public class Member extends AuditModel {
 	@OneToMany(targetEntity = Phone.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "member_id")
 	private Set<Phone> phones = new HashSet<Phone>();
+	
+	@OneToMany(targetEntity = Role.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name = "member_id")
+	private Set<Role> roles = new HashSet<Role>();
+
 }

@@ -18,7 +18,7 @@ import com.javarako.akuc.repository.ReferenceCodeRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/secure")
 public class CodeController {
 
 	@Autowired

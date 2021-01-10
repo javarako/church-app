@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,13 +33,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/secure")
 public class OfferingController {
 
 	@Autowired
 	OfferingRepository offeringRepository;
 
 	@GetMapping("/offerings")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public ResponseEntity<Map<String, Object>> getByOfferingSunday(@RequestParam(required = false) Date offeringSunday,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "30") int size) {
 
@@ -65,6 +67,7 @@ public class OfferingController {
 	}
 
 	@GetMapping("/offerings/{id}")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public Offering getById(@PathVariable("id") long id) {
 
 		return offeringRepository.findById(id).map(offering -> {
@@ -73,6 +76,7 @@ public class OfferingController {
 	}
 
 	@PostMapping("/offerings")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public Offering create(@RequestBody Offering offering) {
 		try {
 			log.info(offering.toString());
@@ -88,6 +92,7 @@ public class OfferingController {
 	}
 
 	@PutMapping("/offerings/{id}")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public Offering update(@PathVariable("id") long id, @RequestBody Offering offering) {
 
 		return offeringRepository.findById(id).map(existingOffering -> {
@@ -97,12 +102,14 @@ public class OfferingController {
 	}
 	
 	@DeleteMapping("/offerings/{id}")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") long id) {
 		offeringRepository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@DeleteMapping("/offerings")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<HttpStatus> deleteAll() {
 		offeringRepository.deleteAll();
 		return new ResponseEntity<>(HttpStatus.OK);

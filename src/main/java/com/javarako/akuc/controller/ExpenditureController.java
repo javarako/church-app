@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/secure")
 public class ExpenditureController {
 
 	@Autowired
@@ -88,6 +89,7 @@ public class ExpenditureController {
 	}
 
 	@PostMapping("/expenditures")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public Expenditure create(@RequestBody Expenditure expenditure) {
 		try {
 			log.info(expenditure.toString());
@@ -103,6 +105,7 @@ public class ExpenditureController {
 	}
 
 	@PutMapping("/expenditures/{id}")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public Expenditure update(@PathVariable("id") long id, @RequestBody Expenditure expenditure) {
 
 		return expenditureRepository.findById(id).map(existing -> {
@@ -112,12 +115,14 @@ public class ExpenditureController {
 	}
 	
 	@DeleteMapping("/expenditures/{id}")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") long id) {
 		expenditureRepository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@DeleteMapping("/expenditures")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<HttpStatus> deleteAll() {
 		expenditureRepository.deleteAll();
 		return new ResponseEntity<>(HttpStatus.OK);

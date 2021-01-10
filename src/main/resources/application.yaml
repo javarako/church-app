@@ -13,4 +13,4 @@ spring.datasource:
   url: jdbc:postgresql://localhost:5432/akuc_db
   username: postgres
   password: password
-  hikari:    connectionTimeout: 20000    maximumPoolSize: 5
+  hikari:    connectionTimeout: 20000    maximumPoolSize: 5# App Propertiesjavarako:  jwtSecret: javarakoSecretKey  jwtExpirationMs: 600000

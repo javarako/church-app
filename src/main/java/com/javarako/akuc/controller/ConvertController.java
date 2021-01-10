@@ -12,7 +12,7 @@ import com.javarako.akuc.util.ReferenceCodeCreateByCSV;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/secure")
 public class ConvertController {
 
 	@Autowired
