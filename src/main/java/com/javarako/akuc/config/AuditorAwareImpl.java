@@ -18,7 +18,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
             return Optional.ofNullable(user);
 			
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.warn(e.getMessage());
 			return Optional.ofNullable("anonymous");
 		}
     }
