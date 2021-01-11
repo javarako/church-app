@@ -47,7 +47,7 @@ public class Member extends AuditModel {
 	private String spouseName;
 	private String spouseNickName;
 	private String password;
-	//@Column(unique = true)
+	@Column(unique = true)
 	private String primaryEmail;
 	private String secondaryEmail;
 	@Column(unique = true)

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.javarako.akuc.model.Address;
 import com.javarako.akuc.model.Member;
 import com.javarako.akuc.model.Phone;
+import com.javarako.akuc.model.Role;
 import com.javarako.akuc.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,12 +42,14 @@ public class MemerCreateByCSV {
 		list.forEach(str -> {
 			String[] fields = str.split(",");
 			Member member = getMember(fields);
+			member.getRoles().add(getDefaultRole());
 			
 			Address address = getAddress(fields);
 			member.getAddresses().add(address);
 			
 			Set<Phone> phones = getPhones(fields);
 			member.getPhones().addAll(phones);
+			
 			log.debug(member.toString());
 			memberRepository.save(member);
 			log.debug("saved!");
@@ -120,6 +123,12 @@ public class MemerCreateByCSV {
 		member.setSecondaryEmail(fields[8].trim());
 		member.setLocationCode(getLocationCode(fields[9].trim()));
 		return member;
+	}
+	
+	private Role getDefaultRole() {
+		Role role = new Role();
+		role.setType(RoleType.ROLE_USER);
+		return role;
 	}
 	
 	private String getLocationCode(String str) {
