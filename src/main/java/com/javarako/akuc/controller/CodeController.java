@@ -1,6 +1,7 @@
 package com.javarako.akuc.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,5 +40,13 @@ public class CodeController {
 			return accountCode;
 		}).orElseThrow(() -> new ApiResponseException(code + " budget code not found!", HttpStatus.NOT_FOUND));
 	}
-	
+
+	@GetMapping("/codes/allAccountCodes")
+	public List<ReferenceCode> getAllByAccountCodes() {
+		return accountCodeRepository.findAll().stream().map(
+				accountCode -> 
+					new ReferenceCode(null, "AccountCode", accountCode.getCode(), accountCode.getCode() + " " + accountCode.getItem()))
+				.collect(Collectors.toList());
+	}
+
 }
