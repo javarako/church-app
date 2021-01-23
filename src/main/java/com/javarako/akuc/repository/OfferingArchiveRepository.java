@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.javarako.akuc.model.OfferingArchive;
+import com.javarako.akuc.entity.OfferingArchive;
 
 public interface OfferingArchiveRepository extends JpaRepository<OfferingArchive, Long> {
 	

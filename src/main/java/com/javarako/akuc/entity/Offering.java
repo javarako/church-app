@@ -1,4 +1,4 @@
-package com.javarako.akuc.model;
+package com.javarako.akuc.entity;
 
 import java.util.Date;
 
@@ -12,21 +12,19 @@ import lombok.Setter;
 import lombok.ToString;
 
 /********************************
-CREATE TABLE public.offering_archive
+CREATE TABLE public.offering
 (
-    member_id bigint,
-    name character varying(50) COLLATE pg_catalog."default",
-    id bigint,
-    offering_date date,
-    offering_sunday date,
-    offering_number integer,
+    id bigint NOT NULL,
+    offering_date date NOT NULL,
+    offering_number integer NOT NULL,
     offering_type character varying(10) COLLATE pg_catalog."default",
     amount_type character varying(10) COLLATE pg_catalog."default",
     amount double precision,
     created_at time with time zone,
     updated_at time with time zone,
     created_by character varying(50) COLLATE pg_catalog."default",
-    updated_by character varying(50) COLLATE pg_catalog."default"
+    updated_by character varying(50) COLLATE pg_catalog."default",
+    offering_sunday date,
 )
  *******************************/
 
@@ -34,20 +32,17 @@ CREATE TABLE public.offering_archive
 @Setter
 @ToString
 @Entity
-public class OfferingArchive extends AuditModel {
+public class Offering extends AuditModel {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	private Long memberId;
-	private Long offeringId;
-	private String name;
+
 	private Date offeringDate;
 	private Date offeringSunday;
-	private Long offeringNumber;
+	private Integer offeringNumber;
 	private String offeringType;
 	private String amountType;
 	private Double amount;

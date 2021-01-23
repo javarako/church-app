@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.javarako.akuc.model.Address;
-import com.javarako.akuc.model.Member;
-import com.javarako.akuc.model.Phone;
-import com.javarako.akuc.model.Role;
+import com.javarako.akuc.entity.Address;
+import com.javarako.akuc.entity.Member;
+import com.javarako.akuc.entity.Phone;
+import com.javarako.akuc.entity.Role;
 import com.javarako.akuc.repository.MemberRepository;
 
 import lombok.extern.slf4j.Slf4j;

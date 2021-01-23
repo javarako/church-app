@@ -1,4 +1,4 @@
-package com.javarako.akuc.model;
+package com.javarako.akuc.entity;
 
 import java.io.Serializable;
 import java.util.Date;

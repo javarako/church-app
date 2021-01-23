@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javarako.akuc.entity.Member;
 import com.javarako.akuc.exception.ApiResponseException;
-import com.javarako.akuc.model.Member;
 import com.javarako.akuc.repository.MemberRepository;
 import com.javarako.akuc.repository.OfferingArchiveRepository;
 

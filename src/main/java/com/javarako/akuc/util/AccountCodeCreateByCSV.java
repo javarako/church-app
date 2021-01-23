@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.javarako.akuc.model.AccountCode;
+import com.javarako.akuc.entity.AccountCode;
 import com.javarako.akuc.repository.AccountCodeRepository;
 
 import lombok.extern.slf4j.Slf4j;

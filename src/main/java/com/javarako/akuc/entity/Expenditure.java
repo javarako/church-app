@@ -1,4 +1,4 @@
-package com.javarako.akuc.model;
+package com.javarako.akuc.entity;
 
 import java.io.File;
 import java.util.Date;

@@ -15,9 +15,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.javarako.akuc.model.Address;
-import com.javarako.akuc.model.Member;
-import com.javarako.akuc.model.Phone;
+import com.javarako.akuc.entity.Address;
+import com.javarako.akuc.entity.Member;
+import com.javarako.akuc.entity.Phone;
 import com.javarako.akuc.util.AddressType;
 import com.javarako.akuc.util.PhoneType;
 

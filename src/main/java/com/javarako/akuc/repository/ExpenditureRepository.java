@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.javarako.akuc.model.Expenditure;
+import com.javarako.akuc.entity.Expenditure;
 
 public interface ExpenditureRepository extends JpaRepository<Expenditure, Long> {
 

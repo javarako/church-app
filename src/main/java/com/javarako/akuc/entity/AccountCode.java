@@ -1,4 +1,4 @@
-package com.javarako.akuc.model;
+package com.javarako.akuc.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

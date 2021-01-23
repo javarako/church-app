@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.javarako.akuc.model.ReferenceCode;
+import com.javarako.akuc.entity.ReferenceCode;
 import com.javarako.akuc.repository.ReferenceCodeRepository;
 
 import lombok.extern.slf4j.Slf4j;

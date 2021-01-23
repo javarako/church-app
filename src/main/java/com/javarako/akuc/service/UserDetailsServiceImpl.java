@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.javarako.akuc.model.Member;
+import com.javarako.akuc.entity.Member;
 import com.javarako.akuc.repository.MemberRepository;
 
 @Service

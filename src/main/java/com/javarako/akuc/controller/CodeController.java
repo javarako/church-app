@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javarako.akuc.entity.AccountCode;
+import com.javarako.akuc.entity.ReferenceCode;
 import com.javarako.akuc.exception.ApiResponseException;
-import com.javarako.akuc.model.AccountCode;
-import com.javarako.akuc.model.ReferenceCode;
 import com.javarako.akuc.repository.AccountCodeRepository;
 import com.javarako.akuc.repository.ReferenceCodeRepository;
 
