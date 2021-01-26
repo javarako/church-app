@@ -14,4 +14,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
 	Optional<Attendance> findByMemberIdAndDate(Long memberId, Date date);
 	
+	void deleteByMemberIdAndDate(Long memberId, Date date);
+	
 }

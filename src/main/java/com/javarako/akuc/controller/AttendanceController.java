@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -102,7 +103,7 @@ public class AttendanceController {
 						x.getNickName() + (!Strings.isEmpty(x.getNickName()) && !Strings.isEmpty(x.getName()) ? "/":"") + x.getName(), 
 						attendance.isAttendance(), 
 						x.getSpouseNickName() + (!Strings.isEmpty(x.getSpouseNickName()) && !Strings.isEmpty(x.getSpouseName()) ? "/":"") + x.getSpouseName(), 
-						attendance.isAttendance(), 
+						attendance.isSpouseAttendance(), 
 						null);
 			} else {
 				return new AttendanceModel(
@@ -121,7 +122,7 @@ public class AttendanceController {
 				.filter(x -> !Strings.isEmpty(x.getVisitorName()))
 				.map(x -> {
 					return new AttendanceModel(
-							x.getId(), sunday, null, 
+							x.getId(), sunday, x.getMemberId(), 
 							null, 
 							x.isAttendance(), 
 							null, 
@@ -163,13 +164,14 @@ public class AttendanceController {
 		return attendance;
 	}
 	
-	@PutMapping("/attendances/{id}")
-	public Attendance update(@PathVariable("id") long id, @RequestBody AttendanceModel x) {
-		return attendanceRepository.findById(id).map(existing-> {
-			Attendance attendance = mapAttendance(x);
-			attendance.setId(existing.getId());
-			return attendanceRepository.save(attendance);
-		}).orElseThrow(() -> new ApiResponseException(id + " not found!", HttpStatus.NOT_FOUND));
+	@PutMapping("/attendances")
+	public Attendance update(@RequestBody AttendanceModel x) {
+		Attendance attendance = mapAttendance(x);
+		return attendanceRepository.findByMemberIdAndDate(x.getMemberId(), x.getDate())
+				.map(existing-> {
+					attendance.setId(existing.getId());
+					return attendanceRepository.save(attendance);
+		}).orElse(attendanceRepository.save(attendance));
 	}
 
 	@DeleteMapping("/attendances/{id}")
@@ -178,12 +180,29 @@ public class AttendanceController {
 		attendanceRepository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@Transactional
+	@DeleteMapping("/attendances")
+	@PreAuthorize("hasRole('ROLE_MEMBERSHIP')")
+	public ResponseEntity<HttpStatus> deleteVisitor(
+			@RequestParam(required = false) Date sunday,
+			@RequestParam(required = false) long memberId) {
+		
+		log.info("/attendances?sunday={}&memberId={}", sunday, memberId);
+		sunday.setHours(0);
+		sunday.setMinutes(0);
+		sunday.setSeconds(0);
+		
+		attendanceRepository.deleteByMemberIdAndDate(memberId, sunday);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
+	/***
 	@DeleteMapping("/attendances")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<HttpStatus> deleteAll() {
 		attendanceRepository.deleteAll();
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-
+	***/
 }
