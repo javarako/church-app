@@ -57,6 +57,7 @@ public class Member extends AuditModel {
 	private String groupCode;
 	private Date birthDate;
 	private Date spouseBirthDate;
+	private String imageName;
 	
 	@OneToMany(targetEntity = Address.class, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "member_id")
