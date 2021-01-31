@@ -45,7 +45,6 @@ public class MemberController {
 	OfferingArchiveRepository offeringArchiveRepository;
 	
 	@GetMapping("/members")
-	@PreAuthorize("hasRole('ROLE_MEMBERSHIP') or hasRole('ROLE_TREASURER')")
 	public ResponseEntity<Map<String, Object>> getAll(@RequestParam(required = false) String name,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "nickName") String sortBy) {
