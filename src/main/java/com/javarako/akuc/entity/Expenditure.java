@@ -57,10 +57,10 @@ public class Expenditure extends AuditModel {
 	private Integer chequeNo;
 	private String payableTo;
 	private String note;
+	private boolean hst;
 	
 	@OneToOne(targetEntity = AccountCode.class)
 	@JoinColumn(name = "code")
 	private AccountCode accountCode;
-
 
 }
