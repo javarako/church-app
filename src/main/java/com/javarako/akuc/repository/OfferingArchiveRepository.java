@@ -1,5 +1,7 @@
 package com.javarako.akuc.repository;
 
+import java.util.Date;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,5 +14,5 @@ public interface OfferingArchiveRepository extends JpaRepository<OfferingArchive
 	@Transactional
 	@Modifying
 	@Query(value = "CALL offering_archiving(?1, ?2, ?3)", nativeQuery = true)
-	public void getOfferingArchiving(Integer offeringNumber, String startDate, String endDate);
+	public void getOfferingArchiving(Integer offeringNumber, Date startDate, Date endDate);
 }

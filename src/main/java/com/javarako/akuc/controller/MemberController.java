@@ -1,6 +1,5 @@
 package com.javarako.akuc.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -91,10 +90,10 @@ public class MemberController {
 
 		Calendar start = new GregorianCalendar(year, 0, 1);
 		Calendar end = new GregorianCalendar(year, 11, 31);
-		SimpleDateFormat yyyyMMDD = new SimpleDateFormat("yyyyMMdd");
-
-		offeringArchiveRepository.getOfferingArchiving(offeringNumber, yyyyMMDD.format(start.getTime()),
-				yyyyMMDD.format(end.getTime()));
+		
+		//SimpleDateFormat yyyyMMDD = new SimpleDateFormat("yyyyMMdd");
+		//offeringArchiveRepository.getOfferingArchiving(offeringNumber, yyyyMMDD.format(start.getTime()), yyyyMMDD.format(end.getTime()));
+		offeringArchiveRepository.getOfferingArchiving(offeringNumber, start.getTime(), end.getTime());
 	}
 
 	@PostMapping("/members")

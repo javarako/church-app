@@ -22,7 +22,7 @@
 22,AMOUNT_TYPE,Cheque,Cheque
 23,AMOUNT_TYPE,CreditCard,Credit Card
 24,AMOUNT_TYPE,eTransfer,eTransfer
-25,AMOUNT_TYPE,Coin,Coin
+25,AMOUNT_TYPE,Donated_Goods,Donated Goods
 26,LOCATION_CODE,Location_1,1 구역
 27,LOCATION_CODE,Location_2,2 구역
 28,LOCATION_CODE,Location_3,3 구역
@@ -35,14 +35,14 @@
 35,GROUP_CODE,Joseph,Joseph
 36,GROUP_CODE,Jonah,Jonah
 37,GROUP_CODE,SundaySchool,Sunday School
-37,COMMITTEE_CODE,01.MinistryPersonnel,		01.목회인사 위원회
-37,COMMITTEE_CODE,02.Administration,        02.행정/시설 위원회
-37,COMMITTEE_CODE,03.Worship,               03.예배 위원회
-37,COMMITTEE_CODE,04.MusicChoir,            04.음악 위원회
-37,COMMITTEE_CODE,05.WebMission,            05.웹/선교 위원회
-37,COMMITTEE_CODE,06.Publication,           06.도서출판 위원회
-37,COMMITTEE_CODE,07.Education,             07.교육 위원회
-37,COMMITTEE_CODE,08.FellowshipRecreation,  08.친교/레크레이숀 위원회
-37,COMMITTEE_CODE,09.NewFamily,             09.새교우 환영 위원회
-37,COMMITTEE_CODE,10.Contingency,           10.예비비
-37,COMMITTEE_CODE,50.SpecialFunds,          50.특별회계지출
+38,COMMITTEE_CODE,01.MinistryPersonnel,		01.목회인사 위원회
+39,COMMITTEE_CODE,02.Administration,        02.행정/시설 위원회
+40,COMMITTEE_CODE,03.Worship,               03.예배 위원회
+41,COMMITTEE_CODE,04.MusicChoir,            04.음악 위원회
+42,COMMITTEE_CODE,05.WebMission,            05.웹/선교 위원회
+43,COMMITTEE_CODE,06.Publication,           06.도서출판 위원회
+44,COMMITTEE_CODE,07.Education,             07.교육 위원회
+45,COMMITTEE_CODE,08.FellowshipRecreation,  08.친교/레크레이숀 위원회
+46,COMMITTEE_CODE,09.NewFamily,             09.새교우 환영 위원회
+47,COMMITTEE_CODE,10.Contingency,           10.예비비
+48,COMMITTEE_CODE,50.SpecialFunds,          50.특별회계지출

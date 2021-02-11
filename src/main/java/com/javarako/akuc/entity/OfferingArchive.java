@@ -51,5 +51,6 @@ public class OfferingArchive extends AuditModel {
 	private String offeringType;
 	private String amountType;
 	private Double amount;
+	private String memo;
 
 }
