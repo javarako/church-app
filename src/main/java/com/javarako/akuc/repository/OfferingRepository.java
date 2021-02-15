@@ -11,6 +11,7 @@ import com.javarako.akuc.entity.Offering;
 
 public interface OfferingRepository extends JpaRepository<Offering, Long> {
 
+	List<Offering> findByOfferingSunday(Date offeringSunday);
 	Page<Offering> findByOfferingSunday(Date offeringSunday, Pageable pageable);
 	Page<Offering> findByOfferingSundayBetween(Date start, Date end, Pageable pageable);
 	Page<Offering> findByOfferingNumber(Long offeringNumber, Pageable pageable);

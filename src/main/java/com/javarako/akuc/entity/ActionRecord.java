@@ -1,11 +1,13 @@
 package com.javarako.akuc.entity;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.javarako.akuc.util.ActionType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,17 +17,16 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
-public class Attendance extends AuditModel {
+public class ActionRecord extends AuditModel {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private Date date;
-	private Long memberId;
-	private boolean attendance;
-	private boolean spouseAttendance;
-	private String visitorName;
+	private String tableName;
+	@Enumerated(EnumType.STRING)
+	private ActionType action;
+	private String content;
 
 }

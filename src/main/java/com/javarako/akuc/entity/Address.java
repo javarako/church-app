@@ -17,22 +17,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/********************************
-CREATE TABLE public.address
-(
-    id bigint NOT NULL,
-    member_id bigint NOT NULL,
-    type character(5) COLLATE pg_catalog."default",
-    address_1 character varying COLLATE pg_catalog."default",
-    address_2 character varying COLLATE pg_catalog."default",
-    city character(20) COLLATE pg_catalog."default",
-    province character(20) COLLATE pg_catalog."default",
-    country character(20) COLLATE pg_catalog."default",
-    postal_code character(6) COLLATE pg_catalog."default",
-    main_address boolean,
-)
- *******************************/
-
 @Getter
 @Setter
 @ToString

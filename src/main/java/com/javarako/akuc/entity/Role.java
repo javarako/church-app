@@ -15,26 +15,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/********************************
-CREATE TABLE public.role
-(
-    id bigint NOT NULL,
-    member_id bigint NOT NULL,
-    type character varying(20) COLLATE pg_catalog."default",
-    created_at time with time zone,
-    updated_at time with time zone,
-    created_by character varying(50) COLLATE pg_catalog."default",
-    updated_by character varying(50) COLLATE pg_catalog."default",
-    CONSTRAINT role_pkey PRIMARY KEY (id)
-        USING INDEX TABLESPACE akuc_space,
-    CONSTRAINT role_fk FOREIGN KEY (member_id)
-        REFERENCES public.member (member_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID
-)
- *******************************/
-
 @Getter
 @Setter
 @ToString

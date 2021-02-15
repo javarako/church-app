@@ -11,25 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/********************************
-CREATE TABLE public.offering_archive
-(
-    member_id bigint,
-    name character varying(50) COLLATE pg_catalog."default",
-    id bigint,
-    offering_date date,
-    offering_sunday date,
-    offering_number integer,
-    offering_type character varying(10) COLLATE pg_catalog."default",
-    amount_type character varying(10) COLLATE pg_catalog."default",
-    amount double precision,
-    created_at time with time zone,
-    updated_at time with time zone,
-    created_by character varying(50) COLLATE pg_catalog."default",
-    updated_by character varying(50) COLLATE pg_catalog."default"
-)
- *******************************/
-
 @Getter
 @Setter
 @ToString

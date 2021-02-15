@@ -42,7 +42,7 @@ public class MemerCreateByCSV {
 		list.forEach(str -> {
 			String[] fields = str.split(",");
 			Member member = getMember(fields);
-			member.getRoles().add(getDefaultRole());
+			member.getRoles().add(getRole(RoleType.ROLE_USER));
 			
 			Address address = getAddress(fields);
 			member.getAddresses().add(address);
@@ -55,7 +55,18 @@ public class MemerCreateByCSV {
 			log.debug("saved!");
 		});
 		
+		memberRepository.save(getAdmin("brad.ko@gmail.com"));
+	
 		assertTrue(true);
+	}
+	
+	private Member getAdmin(String email) {
+		return memberRepository.findByPrimaryEmail(email).map(member -> {
+			member.getRoles().add(getRole(RoleType.ROLE_ADMIN));
+			member.getRoles().add(getRole(RoleType.ROLE_MEMBERSHIP));
+			member.getRoles().add(getRole(RoleType.ROLE_TREASURER));
+			return member;
+		}).orElse(null);
 	}
 	
 	private Set<Phone> getPhones(String[] fields) {
@@ -125,9 +136,9 @@ public class MemerCreateByCSV {
 		return member;
 	}
 	
-	private Role getDefaultRole() {
+	private Role getRole(RoleType type) {
 		Role role = new Role();
-		role.setType(RoleType.ROLE_USER);
+		role.setType(type);
 		return role;
 	}
 	

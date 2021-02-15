@@ -17,19 +17,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/********************************
-CREATE TABLE public.member
-(
-    id integer NOT NULL,
-    first_name character varying COLLATE pg_catalog."default",
-    last_name character varying COLLATE pg_catalog."default",
-    primary_email character varying COLLATE pg_catalog."default",
-    secondary_email character varying COLLATE pg_catalog."default",
-    offering_number integer,
-    comment text COLLATE pg_catalog."default",
-)
- *******************************/
-
 @Getter
 @Setter
 @ToString

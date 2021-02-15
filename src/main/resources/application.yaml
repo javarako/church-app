@@ -5,7 +5,7 @@ spring:  jpa:    properties:      hibernate:
 #        dialect: org.hibernate.dialect.PostgreSQLDialect     
         # Hibernate ddl auto (create, create-drop, validate, update)
     hibernate.ddl-auto: update    #`hibernate_sequence' doesn't exist    hibernate.use-new-id-generator-mappings: false
-    show-sql: true    
+    show-sql: truelogging:  level:     org.springframework.core: INFO
 ---
 spring.profiles: local
     
@@ -13,4 +13,4 @@ spring.datasource:
 #  url: jdbc:postgresql://localhost:5432/akuc_db
 #  username: postgres
 #  password: password  url: jdbc:mysql://localhost:13306/akuc_db  username: akuc_db_user  password: password
-  hikari:    connectionTimeout: 20000    maximumPoolSize: 5# App Propertiesjavarako:  jwtSecret: javarakoSecretKey  jwtExpirationMs: 600000
+  hikari:    connectionTimeout: 20000    maximumPoolSize: 10# App Propertiesjavarako:  jwtSecret: javarakoSecretKey  jwtExpirationMs: 600000

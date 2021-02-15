@@ -15,18 +15,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/********************************
-CREATE TABLE public.phone
-(
-    id bigint NOT NULL,
-    member_id bigint NOT NULL,
-    type character(5) COLLATE pg_catalog."default",
-    country_code smallint,
-    "number" character(20) COLLATE pg_catalog."default",
-    extension smallint,
-)
- *******************************/
-
 @Getter
 @Setter
 @ToString

@@ -11,21 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/********************************
-CREATE TABLE public.reference_code
-(
-    id bigint NOT NULL,
-    type character varying(20) COLLATE pg_catalog."default",
-    value character varying(50) COLLATE pg_catalog."default",
-    "viewValue" character varying(100) COLLATE pg_catalog."default",
-    created_at time with time zone,
-    updated_at time with time zone,
-    created_by character varying(50) COLLATE pg_catalog."default",
-    updated_by character varying(50) COLLATE pg_catalog."default",
-    CONSTRAINT reference_code_pkey PRIMARY KEY (id)
-)
- *******************************/
-
 @Getter
 @Setter
 @ToString

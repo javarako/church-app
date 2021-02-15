@@ -11,23 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/********************************
-CREATE TABLE public.offering
-(
-    id bigint NOT NULL,
-    offering_date date NOT NULL,
-    offering_number integer NOT NULL,
-    offering_type character varying(10) COLLATE pg_catalog."default",
-    amount_type character varying(10) COLLATE pg_catalog."default",
-    amount double precision,
-    created_at time with time zone,
-    updated_at time with time zone,
-    created_by character varying(50) COLLATE pg_catalog."default",
-    updated_by character varying(50) COLLATE pg_catalog."default",
-    offering_sunday date,
-)
- *******************************/
-
 @Getter
 @Setter
 @ToString
