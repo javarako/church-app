@@ -12,7 +12,7 @@
 * pgAdmin4 Installation Directory: C:\Works\apps\PostgreSQL\13\pgAdmin 4
 * Stack Builder Installation Directory: C:\Works\apps\PostgreSQL\13
 
-* admin password: password
+* admin password: password 
 
 * akuc_space: C:\Works\apps\PostgreSQL\akuc_space
 * akuc_db: 
