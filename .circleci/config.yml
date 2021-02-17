@@ -10,6 +10,8 @@ workflows:
     jobs:
       - maven/test # checkout, build, test, and upload test results
       - aws-ecr/build-and-push-image:
+          requires:
+            - maven/test
           repo: "${AWS_RESOURCE_NAME_PREFIX}"
           tag: "${CIRCLE_SHA1}"
       - aws-ecs/deploy-service-update:
