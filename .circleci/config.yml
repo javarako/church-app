@@ -9,7 +9,7 @@ workflows:
   build-and-deploy:
     jobs:
       - maven/test:
-          command: 'build'
+          command: 'install'
       - aws-ecr/build-and-push-image:
           requires:
             - maven/test
