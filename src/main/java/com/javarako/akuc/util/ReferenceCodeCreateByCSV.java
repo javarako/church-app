@@ -1,7 +1,5 @@
 package com.javarako.akuc.util;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,8 +37,6 @@ public class ReferenceCodeCreateByCSV {
 			referenceCodeRepository.save(referenceCode);
 			log.debug("saved!");
 		});
-		
-		assertTrue(true);
 	}
 	
 	private ReferenceCode getReferenceCode(String[] fields) {

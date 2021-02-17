@@ -1,7 +1,5 @@
 package com.javarako.akuc.util;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -39,8 +37,6 @@ public class AccountCodeCreateByCSV {
 			accountCodeRepository.save(accountCode);
 			log.debug("saved!");
 		});
-		
-		assertTrue(true);
 	}
 	
 	//1.일반회계 / GENERAL FUND,	01.목회인사 위원회,	01-5111-001,	목회자 사례비
