@@ -3,8 +3,12 @@ version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@6.15.3
   aws-ecs: circleci/aws-ecs@2.0.0
+  maven: circleci/maven@0.0.12
 
 workflows:
+  maven_test:
+    jobs:
+      - maven/test # checkout, build, test, and upload test results
   build-and-deploy:
     jobs:
       - aws-ecr/build-and-push-image:
