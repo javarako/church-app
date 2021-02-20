@@ -126,7 +126,7 @@ public class OfferingWeeklyReportService {
 
 	private void printdepositDetail(PdfContentByte pageContentByte, DepositDetail depositDetail) {
 		double cash = (depositDetail.getBill100() * 100) + (depositDetail.getBill050() * 50)
-				+ (depositDetail.getBill010() * 10) + (depositDetail.getBill005() * 5);
+				+ (depositDetail.getBill020() * 20) + (depositDetail.getBill010() * 10) + (depositDetail.getBill005() * 5);
 		double total = depositDetail.getChequeTotal() + cash;
 
 		int y = 580;
@@ -139,8 +139,14 @@ public class OfferingWeeklyReportService {
 		printText(pageContentByte, FONT_SIZE_11, 80, y, "Cheque total");
 		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", depositDetail.getChequeTotal()));
 		y -= LINE_SPACE_15;
+		printText(pageContentByte, FONT_SIZE_11, 80, y, "US cheque total");
+		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", depositDetail.getUsChequeTotal()));
+		y -= LINE_SPACE_15;
 		printText(pageContentByte, FONT_SIZE_11, 80, y, "Cash total");
 		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", cash));
+		y -= LINE_SPACE_15;
+		printText(pageContentByte, FONT_SIZE_11, 80, y, "US cash total");
+		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", depositDetail.getUsCashTotal()));
 		y -= LINE_SPACE_15;
 		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format("$100 X %3d", depositDetail.getBill100()));
 		printText(pageContentByte, FONT_SIZE_11, 180, y,
@@ -149,6 +155,10 @@ public class OfferingWeeklyReportService {
 		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format(" $50 X %3d", depositDetail.getBill050()));
 		printText(pageContentByte, FONT_SIZE_11, 180, y,
 				String.format("%7.2f", (double) (50 * depositDetail.getBill050())));
+		y -= LINE_SPACE_15;
+		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format(" $20 X %3d", depositDetail.getBill020()));
+		printText(pageContentByte, FONT_SIZE_11, 180, y,
+				String.format("%7.2f", (double) (20 * depositDetail.getBill020())));
 		y -= LINE_SPACE_15;
 		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format(" $10 X %3d", depositDetail.getBill010()));
 		printText(pageContentByte, FONT_SIZE_11, 180, y,
@@ -167,7 +177,7 @@ public class OfferingWeeklyReportService {
 
 	private void printSummary(PdfContentByte pageContentByte, Map<String, Double> offeringSummary) {
 		int typeMaxLength = 35;
-		int y = 410;
+		int y = 350;
 		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format("[Offering detail by amount type]"));
 
 		// AMOUNT_TYPE

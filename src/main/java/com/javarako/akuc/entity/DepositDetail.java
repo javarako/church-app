@@ -20,8 +20,11 @@ public class DepositDetail extends AuditModel {
 	@Id
 	private Date offeringSunday;
 	private double chequeTotal;
+	private double usChequeTotal;
+	private double usCashTotal;
 	private int bill100;
 	private int bill050;
+	private int bill020;
 	private int bill010;
 	private int bill005;
 	private int coinOut;
