@@ -6,27 +6,47 @@ orbs:
   maven: circleci/maven@0.0.12
 
 jobs:
-  build:
+  build_and_deploy:
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:latest"' >> $BASH_ENV
+      - run:
+          name: Install dependencies for project
+          command: gradle assemble
+      - run:
+          name: Install dependencies for AWS
+          command: |
+            sudo apt-get update
+            sudo apt-get -y -qq install awscli
+            sudo apt-get install python3-pip
+            sudo pip3 install --upgrade awscli
+      - run:
+          name: Build image
+          command: |
+            docker build -t $FULL_IMAGE_NAME .
+      - run:
+          name: Push image
+          command: |
+            eval $(aws ecr get-login --region $AWS_REGION --no-include-email)
+            docker push $FULL_IMAGE_NAME
+
+
+workflows:
+  build-deploy:
     jobs:
-      - maven/test:
-          command: 'install'
-      - aws-ecr/build-and-push-image:
-          requires:
-            - maven/test
-          repo: "${AWS_RESOURCE_NAME_PREFIX}"
-          tag: "${CIRCLE_SHA1}"
-  deploy:
-    jobs:
+      - build_and_deploy
       - aws-ecs/deploy-service-update:
           requires:
-            - aws-ecr/build-and-push-image # only run this job once aws-ecr/build-and-push-image has completed
+            - build_and_deploy
           family: "${AWS_RESOURCE_NAME_PREFIX}-service"
           cluster-name: "${AWS_RESOURCE_NAME_PREFIX}-cluster"
           container-image-name-updates: "container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=${CIRCLE_SHA1}"
-
-workflows:
-  build-and-deploy:
-    jobs:
-      - build
-      - deploy
       
