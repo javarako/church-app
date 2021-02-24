@@ -17,7 +17,7 @@ import com.javarako.akuc.exception.ApiResponseException;
 import com.javarako.akuc.repository.AccountCodeRepository;
 import com.javarako.akuc.repository.ReferenceCodeRepository;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://72.141.29.202:7852","http://localhost:4200"} )
 @RestController
 @RequestMapping("/api/secure")
 public class CodeController {

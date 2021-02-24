@@ -10,7 +10,7 @@ import com.javarako.akuc.util.AccountCodeCreateByCSV;
 import com.javarako.akuc.util.MemerCreateByCSV;
 import com.javarako.akuc.util.ReferenceCodeCreateByCSV;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = {"http://72.141.29.202:7852","http://localhost:4200"} )
 @RestController
 @RequestMapping("/api/auth")
 public class ConvertController {
