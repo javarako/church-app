@@ -1,23 +1,39 @@
 package com.javarako.akuc.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javarako.akuc.entity.MonthlyAmount;
+import com.javarako.akuc.exception.ApiResponseException;
+import com.javarako.akuc.model.ReportParam;
 import com.javarako.akuc.repository.MonthlyAmountDao;
 import com.javarako.akuc.service.FinancialReportService;
 
-@CrossOrigin(origins = {"http://72.141.29.202:7852","http://localhost:4200"} )
+import lombok.extern.slf4j.Slf4j;
+
+@CrossOrigin(origins = { "http://72.141.29.202:7852", "http://localhost:4200" })
 @RestController
 @RequestMapping("/api/secure")
+@Slf4j
 public class ReportController {
 
 	@Autowired
@@ -25,43 +41,43 @@ public class ReportController {
 	@Autowired
 	FinancialReportService financialReportService;
 
-
 	@GetMapping("/report/offering")
 	public List<MonthlyAmount> getMonthlyOfferingAmount() {
-		Date start = null;
-		try {
-			start = new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(new java.util.Date().getYear())+"-01-01");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		Date end = new Date();
+		Calendar end = new GregorianCalendar();
+		Calendar start = new GregorianCalendar(end.get(Calendar.YEAR), 0, 1);
 
-		return monthlyAmountDao.getMonthlyOfferingAmount(start, end);
+		return monthlyAmountDao.getMonthlyOfferingAmount(start.getTime(), end.getTime());
 	}
 
 	@GetMapping("/report/expenditure")
 	public List<MonthlyAmount> getMonthlyExpenditureAmount() {
-		Date start = null;
-		try {
-			start = new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(new java.util.Date().getYear())+"-01-01");
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		Date end = new Date();
+		Calendar end = new GregorianCalendar();
+		Calendar start = new GregorianCalendar(end.get(Calendar.YEAR), 0, 1);
 
-		return monthlyAmountDao.getMonthlyExpenditureAmount(start, end);
+		return monthlyAmountDao.getMonthlyExpenditureAmount(start.getTime(), end.getTime());
 	}
-	
-	@GetMapping("/report/finance")
-	public void getMonthlyFinancialRepot() {
-		Date start = null;
+
+	@Transactional
+	@PostMapping("/report/finance")
+	@PreAuthorize("hasRole('ROLE_USER')")
+	public ResponseEntity<Resource> getMonthlyFinancialRepot(@RequestBody ReportParam param) {
+		// Calendar end = new GregorianCalendar();
+		// Calendar start = new GregorianCalendar(end.get(Calendar.YEAR), 0, 1);
+		log.error(param.getFromDate().toString());
+
 		try {
-			start = new SimpleDateFormat("yyyy-MM-dd").parse(String.valueOf(new java.util.Date().getYear())+"-01-01");
-		} catch (ParseException e) {
-			e.printStackTrace();
+			String fileName = financialReportService.getFinancialReport(param.getFromDate(), param.getToDate());
+
+			File file = new File(fileName);
+			log.info("{} exists():{}", fileName, file.exists());
+
+			return ResponseEntity.ok().contentLength(file.length())
+					.contentType(MediaType.parseMediaType("application/octet-stream"))
+					.body(new InputStreamResource(new FileInputStream(file)));
+		} catch (FileNotFoundException e) {
+			// e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ApiResponseException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		Date end = new Date();
-		
-		financialReportService.getFinancialReport(start, end);
 	}
 }
