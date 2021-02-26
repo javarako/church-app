@@ -39,9 +39,11 @@ public class OfferingWeeklyReportService {
 	public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public static final String PDF_TEMPLATE_FILE = "WeeklyOfferingReport";
 	public static final String PDF_GEN_FILE = PDF_TEMPLATE_FILE + "GEN_";
+	
 	public static final String PDF_GEN_FILE_PATTERN = PDF_GEN_FILE + "*.pdf";
 	public static final Path rootPath = Paths.get("./");
 	public static final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + PDF_GEN_FILE_PATTERN);
+	
 	public static final int FONT_SIZE_11 = 11;
 	public static final int LINE_SPACE_15 = 15;
 
