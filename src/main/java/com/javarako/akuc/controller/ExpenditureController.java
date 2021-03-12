@@ -1,5 +1,6 @@
 package com.javarako.akuc.controller;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -42,29 +43,33 @@ public class ExpenditureController {
 
 	@GetMapping("/expenditures")
 	public ResponseEntity<Map<String, Object>> get(
-			@RequestParam(required = false) String committeeCode,
-			@RequestParam(required = false) Date startDate,
+			@RequestParam(required = false) String committee,
+			@RequestParam(required = false) Date beginDate,
 			@RequestParam(required = false) Date endDate,
 			@RequestParam(defaultValue = "0") int page, 
 			@RequestParam(defaultValue = "30") int size) {
 
+		Calendar end = new GregorianCalendar();
+
 		if (endDate == null) {
-			endDate = new Date();
+			endDate = end.getTime();
 		}
-		if (startDate == null) {
-			GregorianCalendar januaryFirst = new GregorianCalendar(endDate.getYear(), 0, 1);
-			startDate = januaryFirst.getTime();
+		if (beginDate == null) {
+			Calendar januaryFirst = new GregorianCalendar(end.get(Calendar.YEAR), 0, 1);
+			beginDate = januaryFirst.getTime();
 		}
 		
-		log.info("/expenditures?committeeCode={}, startDate={}, endDate={}", committeeCode,startDate,endDate);
+		log.info("/expenditures?committeeCode={}, startDate={}, endDate={}", committee,beginDate,endDate);
 
 		try {
 			Pageable pageable = PageRequest.of(page, size, Sort.by("requestDate").descending());
 			Page<Expenditure> expenditures = null;
-			if (Strings.isEmpty(committeeCode)) {
-				expenditures = expenditureRepository.findByRequestDateBetween(startDate, endDate, pageable);
+			if (Strings.isEmpty(committee)) {
+				expenditures = expenditureRepository.
+						findByRequestDateBetweenOrderByRequestDateDescIdDesc(beginDate, endDate, pageable);
 			} else {
-				expenditures = expenditureRepository.findByAccountCodeCommitteeCodeAndRequestDateBetween(committeeCode, startDate, endDate, pageable);
+				expenditures = expenditureRepository.
+						findByAccountCodeCommitteeCodeAndRequestDateBetweenOrderByRequestDateDescIdDesc(committee, beginDate, endDate, pageable);
 			}
 			
 			Map<String, Object> response = new HashMap<>();

@@ -37,7 +37,7 @@ import com.javarako.akuc.exception.ApiResponseException;
 import com.javarako.akuc.repository.ActionRecordRepository;
 import com.javarako.akuc.repository.DepositDetailRepository;
 import com.javarako.akuc.repository.OfferingRepository;
-import com.javarako.akuc.service.OfferingWeeklyReportService;
+import com.javarako.akuc.service.ReportService;
 import com.javarako.akuc.util.ActionType;
 import com.javarako.akuc.util.Utils;
 
@@ -56,7 +56,7 @@ public class OfferingController {
 	@Autowired
 	ActionRecordRepository actionRecordRepository;
 	@Autowired
-	OfferingWeeklyReportService offeringWeeklyReportService;
+	ReportService offeringWeeklyReportService;
 	
 	@Autowired
 	ResourceLoader resourceLoader;
@@ -84,6 +84,7 @@ public class OfferingController {
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Exception occurred during getByOfferingSunday():\n{}", e);
+			e.printStackTrace();
 			throw new ApiResponseException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -162,7 +163,8 @@ public class OfferingController {
 
 		return depositDetailRepository.findById(id).map(entity -> {
 			return entity;
-		}).orElseThrow(() -> new ApiResponseException(id + " not found!", HttpStatus.NOT_FOUND));
+		}).orElse(new DepositDetail());
+		//.orElseThrow(() -> new ApiResponseException(id + " not found!", HttpStatus.NOT_FOUND));
 	}
 	
 	@Transactional
@@ -174,7 +176,7 @@ public class OfferingController {
 			log.info(entry.toString());
 			depositDetailRepository.save(entry);
 			
-			String fileName = offeringWeeklyReportService.getWeeklyReport(entry.getOfferingSunday());
+			String fileName = offeringWeeklyReportService.getWeeklyOfferingReport(entry.getOfferingSunday());
 			File file = new File(fileName);
 			log.info("{} exists():{}", fileName, file.exists());
 			

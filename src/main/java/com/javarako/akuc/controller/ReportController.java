@@ -27,6 +27,7 @@ import com.javarako.akuc.exception.ApiResponseException;
 import com.javarako.akuc.model.ReportParam;
 import com.javarako.akuc.repository.MonthlyAmountDao;
 import com.javarako.akuc.service.FinancialReportService;
+import com.javarako.akuc.service.ReportService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,8 +41,50 @@ public class ReportController {
 	MonthlyAmountDao monthlyAmountDao;
 	@Autowired
 	FinancialReportService financialReportService;
+	@Autowired
+	ReportService reportService;
 
-	@GetMapping("/report/offering")
+	@Transactional
+	@PostMapping("/report/offering")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
+	public ResponseEntity<Resource> getWeeklyOfferingAmount(@RequestBody ReportParam param) {
+
+		try {
+			String fileName = reportService.getWeeklyOfferingReport(param.getFromDate(), param.getToDate());
+
+			File file = new File(fileName);
+			log.info("{} exists():{}", fileName, file.exists());
+
+			return ResponseEntity.ok().contentLength(file.length())
+					.contentType(MediaType.parseMediaType("application/octet-stream"))
+					.body(new InputStreamResource(new FileInputStream(file)));
+		} catch (FileNotFoundException e) {
+			// e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ApiResponseException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@Transactional
+	@PostMapping("/report/expenditure")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
+	public ResponseEntity<Resource> getExpenditureAmount(@RequestBody ReportParam param) {
+		try {
+			String fileName = reportService.getExpenditureReport(param);
+
+			File file = new File(fileName);
+			log.info("{} exists():{}", fileName, file.exists());
+
+			return ResponseEntity.ok().contentLength(file.length())
+					.contentType(MediaType.parseMediaType("application/octet-stream"))
+					.body(new InputStreamResource(new FileInputStream(file)));
+		} catch (FileNotFoundException e) {
+			// e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ApiResponseException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	public List<MonthlyAmount> getMonthlyOfferingAmount() {
 		Calendar end = new GregorianCalendar();
 		Calendar start = new GregorianCalendar(end.get(Calendar.YEAR), 0, 1);

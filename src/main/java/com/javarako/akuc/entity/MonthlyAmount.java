@@ -11,7 +11,9 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.SqlResultSetMapping;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -49,7 +51,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @IdClass(MonthlyAmount.class)
 public class MonthlyAmount implements Serializable {
@@ -60,7 +64,9 @@ public class MonthlyAmount implements Serializable {
 	private String type;
 	@Id
 	private Integer month;
+	@EqualsAndHashCode.Exclude
 	private Double subtotal;
+	@EqualsAndHashCode.Exclude
 	private Integer rowPosition;
 	
 }

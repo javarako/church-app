@@ -1,7 +1,10 @@
 package com.javarako.akuc.service;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,9 +26,12 @@ import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.javarako.akuc.entity.DepositDetail;
+import com.javarako.akuc.entity.Expenditure;
 import com.javarako.akuc.entity.Offering;
 import com.javarako.akuc.entity.ReferenceCode;
+import com.javarako.akuc.model.ReportParam;
 import com.javarako.akuc.repository.DepositDetailRepository;
+import com.javarako.akuc.repository.ExpenditureRepository;
 import com.javarako.akuc.repository.OfferingRepository;
 import com.javarako.akuc.repository.ReferenceCodeRepository;
 
@@ -33,16 +39,22 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class OfferingWeeklyReportService {
+public class ReportService {
 
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	public static final String EXP_RPT_FILE = "Expenditure_Report_";
+	public static final PathMatcher exp_matcher = FileSystems.getDefault().getPathMatcher("glob:" + EXP_RPT_FILE + "*");
+	public static final String OFF_RPT_FILE = "Offering_Report_";
+	public static final PathMatcher off_matcher = FileSystems.getDefault().getPathMatcher("glob:" + OFF_RPT_FILE + "*");
+	
 	public static final String PDF_TEMPLATE_FILE = "WeeklyOfferingReport";
 	public static final String PDF_GEN_FILE = PDF_TEMPLATE_FILE + "GEN_";
 	
 	public static final String PDF_GEN_FILE_PATTERN = PDF_GEN_FILE + "*.pdf";
 	public static final Path rootPath = Paths.get("./");
-	public static final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + PDF_GEN_FILE_PATTERN);
+	public static final PathMatcher pdf_matcher = FileSystems.getDefault().getPathMatcher("glob:" + PDF_GEN_FILE_PATTERN);
 	
 	public static final int FONT_SIZE_11 = 11;
 	public static final int LINE_SPACE_15 = 15;
@@ -53,13 +65,115 @@ public class OfferingWeeklyReportService {
 	@Autowired
 	OfferingRepository offeringRepository;
 	@Autowired
+	ExpenditureRepository expenditureRepository;
+	@Autowired
 	DepositDetailRepository depositDetailRepository;
 	@Autowired
 	ReferenceCodeRepository referenceCodeRepository;
 
-	public String getWeeklyReport(Date offeringSunday) {
+	public String getExpenditureReport(ReportParam param) {
+		deleteOneDayOldReport(exp_matcher);
+
+		List<Expenditure> list = null;
+		
+		if ("Outstanding_Cheque".equalsIgnoreCase(param.getType())) {
+			list = expenditureRepository.
+					findOutstandingCheque(param.getFromDate(), param.getToDate());
+		} else {
+			list = expenditureRepository.
+					findByRequestDateBetweenOrderByRequestDateAscAccountCodeCodeAsc(
+							param.getFromDate(), param.getToDate());
+		}
+		
+		String fileName = OFF_RPT_FILE + System.currentTimeMillis() + ".csv";
+
 		try {
-			deleteOneDayOldReport();
+			BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+
+			writer.write(String.format("%s Period: %s ~ %s (Printed: %s)\n",
+					param.getType(),
+					DATE_FORMAT.format(param.getFromDate()),
+					DATE_FORMAT.format(param.getToDate()),
+					DATETIME_FORMAT.format(new Date())
+					));
+			
+			writer.write("Request date, Account #, Item, Committe, Amount, HST, Requestor, Cheque no, Payable to, Discharge, Note, Remarks\n");
+			
+			for (Expenditure expenditure : list) {
+				//offering_sunday, offering_number, offering_type, amount_type, amount, memo
+				writer.write(String.format("%s, %s, %s, %s, %.2f, %.2f, %s, %s, %s, %s, %s, %s\n", 
+						DATE_FORMAT.format(expenditure.getRequestDate()),
+						expenditure.getAccountCode().getCode(),
+						expenditure.getAccountCode().getItem(),
+						expenditure.getAccountCode().getCommittee(),
+						expenditure.getAmount(),
+						expenditure.getHstAmount() == null ? 0:expenditure.getHstAmount() ,
+						expenditure.getRequester().replaceAll(",", " "),
+						expenditure.getChequeNo() == null ? "":expenditure.getChequeNo(),
+						expenditure.getPayableTo().replaceAll(",", " "),
+						expenditure.getChequeNo() != null && expenditure.isChequeClear() == true ? "Yes": "",
+						expenditure.getNote(),
+						expenditure.getRemarks().replaceAll(",", " ").replaceAll("\n", ";")
+						));
+			}
+			
+		    writer.close();
+		    
+		    return fileName;
+		    
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return null;
+	}
+	
+	public String getWeeklyOfferingReport(Date start, Date end) {
+		deleteOneDayOldReport(off_matcher);
+
+		List<Offering> list = offeringRepository.findByOfferingSundayBetweenOrderByOfferingSundayAscOfferingNumberAsc(start, end);
+		
+		String fileName = OFF_RPT_FILE + System.currentTimeMillis() + ".csv";
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+			
+			writer.write(String.format("Offering Report Period: %s ~ %s (Printed: %s)\n",
+					DATE_FORMAT.format(start),
+					DATE_FORMAT.format(end),
+					DATETIME_FORMAT.format(new Date())
+					));
+			
+			writer.write("Offering Sunday, Number, Offering type, Amount type, Amount, Memo\n");
+			
+			for (Offering offering : list) {
+				//offering_sunday, offering_number, offering_type, amount_type, amount, memo
+				writer.write(String.format("%s, %d, %s, %s, %.2f, %s\n", 
+						DATE_FORMAT.format(offering.getOfferingSunday()),
+						offering.getOfferingNumber(),
+						offering.getOfferingType(),
+						offering.getAmountType(),
+						offering.getAmount(),
+						offering.getMemo()
+						));
+			}
+			
+		    writer.close();
+		    
+		    return fileName;
+		    
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public String getWeeklyOfferingReport(Date offeringSunday) {
+		try {
+			deleteOneDayOldReport(pdf_matcher);
 			baseFont = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -72,7 +186,7 @@ public class OfferingWeeklyReportService {
 		return getPDFReport(offeringSunday, offeringSummary, depositDetail);
 	}
 
-	private void deleteOneDayOldReport() {
+	private void deleteOneDayOldReport(PathMatcher matcher) {
 		try {
 			List<File> reports = Files.walk(rootPath).filter(f -> matcher.matches(f.getFileName())).map(Path::toFile)
 					.collect(Collectors.toList());
