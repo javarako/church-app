@@ -31,7 +31,7 @@ import com.javarako.akuc.service.ReportService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@CrossOrigin(origins = { "http://72.141.29.202:7852", "http://localhost:4200" })
+@CrossOrigin
 @RestController
 @RequestMapping("/api/secure")
 @Slf4j

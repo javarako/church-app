@@ -47,7 +47,7 @@ public class MemberRepositoryTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void memberSave() throws SQLException {
 
 		Member member = new Member();
@@ -73,7 +73,7 @@ public class MemberRepositoryTest {
 		assertThat(nonExistingMember.getTotalElements()).isEqualTo(0);
 	}
 
-	@Test
+	//@Test
 	public void memberSearchByName() throws SQLException {
 		Member member = new Member();
 		member.setName("name");
@@ -86,7 +86,7 @@ public class MemberRepositoryTest {
 		assertThat(existingMember_name.getTotalElements()).isEqualTo(1);
 	}
 	
-	@Test
+	//@Test
 	public void memberSearchByNickName() throws SQLException {
 		Member member = new Member();
 		member.setName("name");
@@ -99,7 +99,7 @@ public class MemberRepositoryTest {
 		assertThat(existingMember_nick.getTotalElements()).isEqualTo(1);
 	}
 
-	@Test
+	//@Test
 	public void memberSaveWithPhone() throws SQLException {
 
 		Phone phone = new Phone();

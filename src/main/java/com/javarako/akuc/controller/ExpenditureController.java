@@ -33,7 +33,7 @@ import com.javarako.akuc.repository.ExpenditureRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@CrossOrigin(origins = {"http://72.141.29.202:7852","http://localhost:4200"} )
+@CrossOrigin
 @RestController
 @RequestMapping("/api/secure")
 public class ExpenditureController {

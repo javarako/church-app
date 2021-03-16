@@ -1,7 +1,5 @@
 package com.javarako.akuc.util;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -56,8 +54,6 @@ public class MemerCreateByCSV {
 		});
 		
 		memberRepository.save(getAdmin("brad.ko@gmail.com"));
-	
-		assertTrue(true);
 	}
 	
 	private Member getAdmin(String email) {

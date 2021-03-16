@@ -1,6 +1,6 @@
 package com.javarako.akuc.entity;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,8 +27,8 @@ public class MonthlyAmountTest {
 	@Test
 	public void NamedQuery_MonthlyOfferingAmountTest() {
         List<MonthlyAmount> entities = Collections.checkedList(em.createNamedQuery("MonthlyOfferingAmount").getResultList(), MonthlyAmount.class);
-        assertTrue(entities.size() > 0);
-        assertTrue(entities.stream().allMatch(c -> c.getClass() == MonthlyAmount.class));
+        assertThat(entities.size()).isGreaterThan(0);
+        assertThat(entities.stream().allMatch(c -> c.getClass() == MonthlyAmount.class)).isTrue();
 	}
 
     @AfterAll
