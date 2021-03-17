@@ -1,9 +1,9 @@
 package com.javarako.akuc.service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,7 +40,7 @@ public class FinancialReportService {
 
 	public static final String EXCEL_EXT = ".xlsx";
 	public static final String TEMPLATE_NAME = "Financial_Report_2021";
-	public static final String TEMPLATE_FILE = TEMPLATE_NAME + EXCEL_EXT;
+	public static final String TEMPLATE_FILE = "/" + TEMPLATE_NAME + EXCEL_EXT;
 	public static final String GEN_FILE = TEMPLATE_NAME + "GEN_";
 
 	public static final String GEN_FILE_PATTERN = GEN_FILE + "*.xlsx";
@@ -86,8 +86,7 @@ public class FinancialReportService {
 		try {
 			deleteOneDayOldReport();
 
-			FileInputStream inputStream = new FileInputStream(
-					new File("C:\\Works\\projects\\church-app\\src\\main\\resources\\Financial_Report_2021.xlsx"));
+			InputStream inputStream = getClass().getResourceAsStream(TEMPLATE_FILE);
 			Workbook workbook = new XSSFWorkbook(inputStream);
 
 			DataFormat format = workbook.createDataFormat();
