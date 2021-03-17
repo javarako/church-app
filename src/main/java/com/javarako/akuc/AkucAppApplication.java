@@ -17,6 +17,6 @@ public class AkucAppApplication {
     @PostConstruct
     public void init(){
       // Setting Spring Boot SetTimeZone
-      TimeZone.setDefault(TimeZone.getTimeZone("EST"));
+      TimeZone.setDefault(TimeZone.getTimeZone("America/Toronto"));
     }
 }
