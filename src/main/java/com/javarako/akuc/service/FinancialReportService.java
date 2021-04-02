@@ -29,7 +29,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.javarako.akuc.entity.Expenditure;
 import com.javarako.akuc.entity.MonthlyAmount;
+import com.javarako.akuc.repository.ExpenditureRepository;
 import com.javarako.akuc.repository.MonthlyAmountDao;
 
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +80,9 @@ public class FinancialReportService {
 
 	@Autowired
 	MonthlyAmountDao monthlyAmountDao;
-
+	@Autowired
+	ExpenditureRepository expenditureRepository;
+	
 	public String getFinancialReport(Date start, Date end) {
 
 		String newFile = GEN_FILE + System.currentTimeMillis() + EXCEL_EXT;
@@ -96,6 +100,7 @@ public class FinancialReportService {
 			updateReportDate(start, end, workbook.getSheetAt(0), cellStyle);
 			updateOffering(start, end, workbook.getSheetAt(1));
 			updateExpense(start, end, workbook.getSheetAt(2));
+			updateCashflow(start, end, workbook.getSheetAt(3));
 
 			FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
 			evaluator.evaluateAll();
@@ -193,5 +198,19 @@ public class FinancialReportService {
 		CellUtil.setCellStyleProperty(cell, CellUtil.DATA_FORMAT, cellNumberFormat);
 		cell.setCellValue(totalInSystem);
 	}
+
+	private void updateCashflow(Date start, Date end, Sheet sheetAt) {
+		List<Expenditure> list = expenditureRepository.
+				findOutstandingCheque(start, end);
+		
+		double outstandingCheques = list.stream()
+					.mapToDouble(x -> x.getAmount())
+					.sum();
+		
+		Cell cell = sheetAt.getRow(17).createCell(3);
+		CellUtil.setCellStyleProperty(cell, CellUtil.DATA_FORMAT, cellNumberFormat);
+		cell.setCellValue(outstandingCheques);
+	}
+
 
 }
