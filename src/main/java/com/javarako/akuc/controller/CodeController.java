@@ -41,6 +41,11 @@ public class CodeController {
 		}).orElseThrow(() -> new ApiResponseException(code + " budget code not found!", HttpStatus.NOT_FOUND));
 	}
 
+	@GetMapping("/codes/accountCodesByCommittee/{committeeCode}")
+	public List<AccountCode> getAccountCodesByCommittee(@PathVariable("committeeCode") String committeeCode) {
+		return accountCodeRepository.findByCommitteeCode(committeeCode);
+	}
+
 	@GetMapping("/codes/allAccountCodes")
 	public List<ReferenceCode> getAllByAccountCodes() {
 		return accountCodeRepository.findAll().stream().map(
@@ -48,5 +53,5 @@ public class CodeController {
 					new ReferenceCode(null, "AccountCode", accountCode.getCode(), accountCode.getCode() + " " + accountCode.getItem()))
 				.collect(Collectors.toList());
 	}
-
+	
 }

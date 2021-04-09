@@ -3,17 +3,12 @@ package com.javarako.akuc.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -63,8 +58,7 @@ public class OfferingController {
 	
 	@GetMapping("/offerings")
 	@PreAuthorize("hasRole('ROLE_TREASURER')")
-	public ResponseEntity<Map<String, Object>> getByOfferingSunday(@RequestParam(required = false) Date offeringSunday,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "30") int size) {
+	public List<Offering> getByOfferingSunday(@RequestParam(required = false) Date offeringSunday) {
 
 		if (offeringSunday == null) {
 			offeringSunday = Utils.getSundayFromToday();
@@ -72,16 +66,7 @@ public class OfferingController {
 		log.info("/offerings?offeringSunday={}", offeringSunday);
 
 		try {
-			Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-			Page<Offering> offerings = offeringRepository.findByOfferingSunday(offeringSunday, pageable);
-			
-			Map<String, Object> response = new HashMap<>();
-			response.put("offerings", offerings.getContent());
-			response.put("currentPage", offerings.getNumber());
-			response.put("totalItems", offerings.getTotalElements());
-			response.put("totalPages", offerings.getTotalPages());
-
-			return new ResponseEntity<>(response, HttpStatus.OK);
+			return offeringRepository.findByOfferingSunday(offeringSunday);
 		} catch (Exception e) {
 			log.error("Exception occurred during getByOfferingSunday():\n{}", e);
 			e.printStackTrace();

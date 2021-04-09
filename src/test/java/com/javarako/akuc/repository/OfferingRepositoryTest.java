@@ -6,16 +6,13 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.javarako.akuc.entity.Offering;
@@ -54,19 +51,10 @@ public class OfferingRepositoryTest {
 			Date offeringSunday = Utils.getSundayFromToday();
 			log.info("/offerings?offeringSunday={}", offeringSunday);
 
-			Pageable pageable = PageRequest.of(0, 100, Sort.by("id").descending());
-			Page<Offering> offerings = offeringRepository.findByOfferingSunday(offeringSunday, pageable);
+			List<Offering> offerings = offeringRepository.findByOfferingSunday(offeringSunday);
 			
-			/***
-			Map<String, Object> response = new HashMap<>();
-			response.put("offerings", offerings.getContent());
-			response.put("currentPage", offerings.getNumber());
-			response.put("totalItems", offerings.getTotalElements());
-			response.put("totalPages", offerings.getTotalPages());
-			***/
-			
-			assertThat(offerings.getContent()).isNotNull();
-			assertThat(offerings.getContent().size()).isGreaterThan(0);
+			assertThat(offerings).isNotNull();
+			assertThat(offerings.size()).isGreaterThan(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

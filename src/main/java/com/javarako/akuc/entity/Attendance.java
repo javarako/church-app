@@ -27,5 +27,6 @@ public class Attendance extends AuditModel {
 	private boolean attendance;
 	private boolean spouseAttendance;
 	private String visitorName;
+	private boolean kid;
 
 }

@@ -21,6 +21,7 @@ public class AttendanceModel {
 	private String spouseName;
 	private boolean spouseAttendance;
 	private String visitorName;
+	private boolean kid;
 	
 }
 

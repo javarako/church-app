@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.javarako.akuc.entity.Attendance;
 import com.javarako.akuc.entity.Member;
 import com.javarako.akuc.exception.ApiResponseException;
+import com.javarako.akuc.model.AttendanceCount;
 import com.javarako.akuc.model.AttendanceModel;
 import com.javarako.akuc.model.AttendanceView;
 import com.javarako.akuc.repository.AttendanceRepository;
@@ -45,6 +47,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/secure")
 public class AttendanceController {
 
+	public static final String SUNDAY_SCHOOL_CODE = "SundaySchool";
+	
 	@Autowired
 	MemberRepository memberRepository;
 	@Autowired
@@ -94,6 +98,39 @@ public class AttendanceController {
 		}
 	}
 
+	@GetMapping("/attendances/count")
+	@PreAuthorize("hasRole('ROLE_MEMBERSHIP') or hasRole('ROLE_TREASURER')")
+	public ResponseEntity<AttendanceCount> getCount(
+			@RequestParam(required = true) Date sunday) {
+
+		log.info("/attendances/count?sunday={}", sunday);
+		sunday.setHours(0);
+		sunday.setMinutes(0);
+		sunday.setSeconds(0);
+		
+		try {
+			List<Attendance> attendances = 
+					attendanceRepository.findByDate(sunday);
+			
+			int adult = 0;
+			int childrun = 0;
+			for (Attendance x : attendances) {
+				if (x.isKid()) {
+					if (x.isAttendance()) childrun += 1;
+				} else {
+					if (x.isAttendance()) adult += 1;
+					if (x.isSpouseAttendance()) adult += 1;
+					if (!StringUtils.isEmpty(x.getVisitorName())) adult += 1;
+				}
+			}
+
+			return new ResponseEntity<>(new AttendanceCount(adult, childrun), HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("Exception occurred during getCount():\n{}", e);
+			throw new ApiResponseException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 	private AttendanceView getAttendanceView(Date sunday, Page<Member> members, Map<Long, Attendance> attendances) {
 		List<AttendanceModel> memberList = members.stream().map(x -> {
 			Attendance attendance = attendances.get(x.getMemberId());
@@ -104,7 +141,8 @@ public class AttendanceController {
 						attendance.isAttendance(), 
 						x.getSpouseNickName() + (!Strings.isEmpty(x.getSpouseNickName()) && !Strings.isEmpty(x.getSpouseName()) ? "/":"") + x.getSpouseName(), 
 						attendance.isSpouseAttendance(), 
-						null);
+						null,
+						SUNDAY_SCHOOL_CODE.equals(x.getGroupCode()));
 			} else {
 				return new AttendanceModel(
 						null, sunday, x.getMemberId(), 
@@ -112,7 +150,8 @@ public class AttendanceController {
 						false, 
 						x.getSpouseNickName() + (!Strings.isEmpty(x.getSpouseNickName()) && !Strings.isEmpty(x.getSpouseName()) ? "/":"") + x.getSpouseName(), 
 						false, 
-						null);
+						null,
+						SUNDAY_SCHOOL_CODE.equals(x.getGroupCode()));
 			}
 		}).collect(Collectors.toList());
 		
@@ -127,7 +166,8 @@ public class AttendanceController {
 							x.isAttendance(), 
 							null, 
 							x.isAttendance(), 
-							x.getVisitorName());
+							x.getVisitorName(),
+							x.isKid());
 				})
 				.collect(Collectors.toList());
 		}
@@ -161,6 +201,7 @@ public class AttendanceController {
 		attendance.setAttendance(x.isAttendance());
 		attendance.setSpouseAttendance(x.isSpouseAttendance());
 		attendance.setVisitorName(x.getVisitorName());
+		attendance.setKid(x.isKid());
 		return attendance;
 	}
 	
