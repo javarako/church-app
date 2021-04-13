@@ -116,7 +116,8 @@ public class AttendanceController {
 			int childrun = 0;
 			for (Attendance x : attendances) {
 				if (x.isKid()) {
-					if (x.isAttendance()) childrun += 1;
+					if (x.isAttendance() || 
+							!StringUtils.isEmpty(x.getVisitorName())) childrun += 1;
 				} else {
 					if (x.isAttendance()) adult += 1;
 					if (x.isSpouseAttendance()) adult += 1;
@@ -165,7 +166,7 @@ public class AttendanceController {
 							null, 
 							x.isAttendance(), 
 							null, 
-							x.isAttendance(), 
+							false, 
 							x.getVisitorName(),
 							x.isKid());
 				})
