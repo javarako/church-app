@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.logging.log4j.util.Strings;
@@ -210,7 +211,7 @@ public class OfferingTaxReceiptService extends ReportFileInfo {
 		//end date
 		printText(pageContentByte, 11, 265, 503, DATE_MMDDyyyy_FORMAT.format(end));
 		//amount
-		printText(pageContentByte, 11, 460, 503, NumberFormat.getCurrencyInstance().format(offeringSummary.getTotal()));
+		printText(pageContentByte, 11, 460, 503, NumberFormat.getCurrencyInstance(Locale.US).format(offeringSummary.getTotal()));
 	}
 
 }
