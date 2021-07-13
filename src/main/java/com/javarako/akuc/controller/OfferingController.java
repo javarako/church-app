@@ -32,7 +32,7 @@ import com.javarako.akuc.exception.ApiResponseException;
 import com.javarako.akuc.repository.ActionRecordRepository;
 import com.javarako.akuc.repository.DepositDetailRepository;
 import com.javarako.akuc.repository.OfferingRepository;
-import com.javarako.akuc.service.ReportService;
+import com.javarako.akuc.service.WeeklyOfferingReportService;
 import com.javarako.akuc.util.ActionType;
 import com.javarako.akuc.util.Utils;
 
@@ -51,7 +51,7 @@ public class OfferingController {
 	@Autowired
 	ActionRecordRepository actionRecordRepository;
 	@Autowired
-	ReportService offeringWeeklyReportService;
+	WeeklyOfferingReportService weeklyOfferingReportService;
 	
 	@Autowired
 	ResourceLoader resourceLoader;
@@ -161,7 +161,7 @@ public class OfferingController {
 			log.info(entry.toString());
 			depositDetailRepository.save(entry);
 			
-			String fileName = offeringWeeklyReportService.getWeeklyOfferingReport(entry.getOfferingSunday());
+			String fileName = weeklyOfferingReportService.getWeeklyOfferingReport(entry.getOfferingSunday());
 			File file = new File(fileName);
 			log.info("{} exists():{}", fileName, file.exists());
 			

@@ -26,8 +26,10 @@ import com.javarako.akuc.entity.MonthlyAmount;
 import com.javarako.akuc.exception.ApiResponseException;
 import com.javarako.akuc.model.ReportParam;
 import com.javarako.akuc.repository.MonthlyAmountDao;
+import com.javarako.akuc.service.ExpenditureReportService;
 import com.javarako.akuc.service.FinancialReportService;
-import com.javarako.akuc.service.ReportService;
+import com.javarako.akuc.service.OfferingTaxReceiptService;
+import com.javarako.akuc.service.WeeklyOfferingReportService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +44,11 @@ public class ReportController {
 	@Autowired
 	FinancialReportService financialReportService;
 	@Autowired
-	ReportService reportService;
+	WeeklyOfferingReportService weeklyOfferingReportService;
+	@Autowired
+	OfferingTaxReceiptService offeringTaxReceiptService;
+	@Autowired
+	ExpenditureReportService expenditureReportService;
 
 	@Transactional
 	@PostMapping("/report/offering")
@@ -50,7 +56,7 @@ public class ReportController {
 	public ResponseEntity<Resource> getWeeklyOfferingAmount(@RequestBody ReportParam param) {
 
 		try {
-			String fileName = reportService.getWeeklyOfferingReport(param.getFromDate(), param.getToDate());
+			String fileName = weeklyOfferingReportService.getWeeklyOfferingReport(param.getFromDate(), param.getToDate());
 
 			File file = new File(fileName);
 			log.info("{} exists():{}", fileName, file.exists());
@@ -66,11 +72,32 @@ public class ReportController {
 	}
 
 	@Transactional
+	@PostMapping("/report/taxreceipt")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
+	public ResponseEntity<Resource> getOfferingTaxReceipt(@RequestBody ReportParam param) {
+
+		try {
+			String fileName = offeringTaxReceiptService.getOfferingTaxReceipt(
+					param.getFromDate(), param.getToDate(), param.isAllMember(), param.getOfferingNo());
+
+			File file = new File(fileName);
+			log.info("{} exists():{}", fileName, file.exists());
+
+			return ResponseEntity.ok().contentLength(file.length())
+					.contentType(MediaType.parseMediaType("application/octet-stream"))
+					.body(new InputStreamResource(new FileInputStream(file)));
+		} catch (FileNotFoundException e) {
+			// e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ApiResponseException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	@Transactional
 	@PostMapping("/report/expenditure")
 	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public ResponseEntity<Resource> getExpenditureAmount(@RequestBody ReportParam param) {
 		try {
-			String fileName = reportService.getExpenditureReport(param);
+			String fileName = expenditureReportService.getExpenditureReport(param);
 
 			File file = new File(fileName);
 			log.info("{} exists():{}", fileName, file.exists());
@@ -93,6 +120,7 @@ public class ReportController {
 	}
 
 	@GetMapping("/report/expenditure")
+	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public List<MonthlyAmount> getMonthlyExpenditureAmount() {
 		Calendar end = new GregorianCalendar();
 		Calendar start = new GregorianCalendar(end.get(Calendar.YEAR), 0, 1);
@@ -103,7 +131,7 @@ public class ReportController {
 	@Transactional
 	@PostMapping("/report/finance")
 	@PreAuthorize("hasRole('ROLE_USER')")
-	public ResponseEntity<Resource> getMonthlyFinancialRepot(@RequestBody ReportParam param) {
+	public ResponseEntity<Resource> getMonthlyFinancialReport(@RequestBody ReportParam param) {
 		// Calendar end = new GregorianCalendar();
 		// Calendar start = new GregorianCalendar(end.get(Calendar.YEAR), 0, 1);
 		log.error(param.getFromDate().toString());

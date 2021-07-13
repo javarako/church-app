@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.javarako.akuc.entity.Offering;
 import com.javarako.akuc.util.Utils;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @DataJpaTest
 //@SpringBootTest
 @Slf4j
+@ActiveProfiles("local")
 public class OfferingRepositoryTest {
 
 	@Autowired

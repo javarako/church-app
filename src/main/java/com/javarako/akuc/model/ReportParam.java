@@ -16,6 +16,8 @@ public class ReportParam {
 	private String type;
 	private Date fromDate;
 	private Date toDate;
+	private boolean allMember;
+	private int offeringNo;
 	
 }
 
