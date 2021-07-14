@@ -1,20 +1,12 @@
 package com.javarako.akuc.service;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
@@ -38,19 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class FinancialReportService {
+public class FinancialReportService extends ReportFileInfo{
 
-	public static final String EXCEL_EXT = ".xlsx";
-	public static final String TEMPLATE_NAME = "Financial_Report_2021";
-	public static final String TEMPLATE_FILE = "/" + TEMPLATE_NAME + EXCEL_EXT;
-	public static final String GEN_FILE = TEMPLATE_NAME + "GEN_";
-
-	public static final String GEN_FILE_PATTERN = GEN_FILE + "*.xlsx";
-	public static final Path rootPath = Paths.get("./");
-	public static final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + GEN_FILE_PATTERN);
-
-	public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	private short cellNumberFormat;
 
@@ -88,7 +69,7 @@ public class FinancialReportService {
 		String newFile = GEN_FILE + System.currentTimeMillis() + EXCEL_EXT;
 
 		try {
-			deleteOneDayOldReport();
+			deleteOneHourOldReport(matcher);
 
 			InputStream inputStream = getClass().getResourceAsStream(TEMPLATE_FILE);
 			Workbook workbook = new XSSFWorkbook(inputStream);
@@ -134,22 +115,6 @@ public class FinancialReportService {
 		cell.setCellStyle(cellStyle);
 	}
 
-	private void deleteOneDayOldReport() {
-		try {
-			List<File> reports = Files.walk(rootPath).filter(f -> matcher.matches(f.getFileName())).map(Path::toFile)
-					.collect(Collectors.toList());
-
-			long oneDayOld = new Date().getTime() - (24 * 60 * 60 * 1000);
-
-			reports.forEach(f -> {
-				if (f.lastModified() < oneDayOld)
-					f.deleteOnExit();
-			});
-		} catch (Exception e) {
-			// e.printStackTrace();
-			log.error(e.getMessage());
-		}
-	}
 
 	private void updateOffering(Date start, Date end, Sheet sheetAt) {
 		double totalInSystem = 0L;

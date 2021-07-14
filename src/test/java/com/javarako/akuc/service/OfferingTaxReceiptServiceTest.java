@@ -114,29 +114,29 @@ public class OfferingTaxReceiptServiceTest {
 		printText(pageContentByte, 9, 480, 100, "Page:"+page);
 		
 		//year
-		printText(pageContentByte, 15, 184, 644, "2021");
+		printText(pageContentByte, 15, 184, 659, "2021");
 		
 		//Name
-		printText(pageContentByte, 11, 93, 618, "Brad Ko & Karen Choe");
+		printText(pageContentByte, 11, 93, 633, "Brad Ko & Karen Choe");
 		//Address
-		printText(pageContentByte, 11, 93, 605, "3 Copland Tr.");
+		printText(pageContentByte, 11, 93, 620, "3 Copland Tr.");
 		//City
-		printText(pageContentByte, 11, 93, 592, "Aurora Ontario L4G 4S9");
+		printText(pageContentByte, 11, 93, 607, "Aurora Ontario L4G 4S9");
 
 		//print date
-		printText(pageContentByte, 11, 480, 605, DATE_FORMAT.format(new Date()));
+		printText(pageContentByte, 11, 480, 620, DATE_FORMAT.format(new Date()));
 		//Envelop No
-		printText(pageContentByte, 11, 480, 592, "035");
+		printText(pageContentByte, 11, 480, 607, "035");
 		//Receipt No
-		printText(pageContentByte, 11, 480, 579, "20210035");
+		printText(pageContentByte, 11, 480, 594, "20210035");
 
 		//start date
-		printText(pageContentByte, 11, 200, 503, DATE_FORMAT.format(cal.getTime()));
+		printText(pageContentByte, 11, 200, 494, DATE_FORMAT.format(cal.getTime()));
 		//end date
-		printText(pageContentByte, 11, 265, 503, DATE_FORMAT.format(new Date()));
+		printText(pageContentByte, 11, 265, 494, DATE_FORMAT.format(new Date()));
 		//amount
 		//NumberFormat.getCurrencyInstance().format(12345L);
-		printText(pageContentByte, 11, 460, 503, NumberFormat.getCurrencyInstance().format(12340D));
+		printText(pageContentByte, 11, 460, 494, NumberFormat.getCurrencyInstance().format(12340D));
 	}
 	
 	private void printText(PdfContentByte pageContentByte, final float size, final float x, final float y,

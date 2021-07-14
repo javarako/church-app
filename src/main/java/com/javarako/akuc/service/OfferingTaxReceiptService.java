@@ -50,7 +50,7 @@ public class OfferingTaxReceiptService extends ReportFileInfo {
 	public String getOfferingTaxReceipt(Date start, Date end, boolean allMember, int offeringNumber) {
 
 		try {
-			deleteOneDayOldReport(tax_matcher);
+			deleteOneHourOldReport(tax_matcher);
 			baseFont = BaseFont.createFont(BaseFont.TIMES_BOLD, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
 		} catch (Exception e) {
 			log.error(e.getMessage());
@@ -96,7 +96,7 @@ public class OfferingTaxReceiptService extends ReportFileInfo {
 	
 	public String copyPDF(int count) {
 		
-		String newFile = PDF_OFF_TAX_GEN_FILE + "_T" + System.currentTimeMillis() + ".pdf";
+		String newFile = PDF_OFF_TAX_GEN_FILE + "T" + System.currentTimeMillis() + ".pdf";
 		log.info("Copy a Report:{}", newFile);
 		
 		try {
@@ -189,29 +189,29 @@ public class OfferingTaxReceiptService extends ReportFileInfo {
 		Address address = member.getAddresses().iterator().next();
 				
 		//year
-		printText(pageContentByte, 15, 184, 644, year);
+		printText(pageContentByte, 15, 184, 659, year);
 		
 		//Name
-		printText(pageContentByte, 11, 93, 618, 
+		printText(pageContentByte, 11, 93, 633, 
 				member.getName() + (Strings.isEmpty(member.getSpouseName()) ? "" : " & "+member.getSpouseName()) );
 		//Address
-		printText(pageContentByte, 11, 93, 605, address.getAddress1());
+		printText(pageContentByte, 11, 93, 620, address.getAddress1());
 		//City
-		printText(pageContentByte, 11, 93, 592, address.getCity() + ", " + address.getProvince() + " " + address.getPostalCode());
+		printText(pageContentByte, 11, 93, 607, address.getCity() + ", " + address.getProvince() + " " + address.getPostalCode());
 
 		//print date
-		printText(pageContentByte, 11, 480, 605, DATE_MMDDyyyy_FORMAT.format(new Date()));
+		printText(pageContentByte, 11, 480, 620, DATE_MMDDyyyy_FORMAT.format(new Date()));
 		//Envelop No
-		printText(pageContentByte, 11, 480, 592, number);
+		printText(pageContentByte, 11, 480, 607, number);
 		//Receipt No
-		printText(pageContentByte, 11, 480, 579, year + number);
+		printText(pageContentByte, 11, 480, 594, year + number);
 
 		//start date
-		printText(pageContentByte, 11, 200, 503, DATE_MMDDyyyy_FORMAT.format(start));
+		printText(pageContentByte, 11, 200, 494, DATE_MMDDyyyy_FORMAT.format(start));
 		//end date
-		printText(pageContentByte, 11, 265, 503, DATE_MMDDyyyy_FORMAT.format(end));
+		printText(pageContentByte, 11, 265, 494, DATE_MMDDyyyy_FORMAT.format(end));
 		//amount
-		printText(pageContentByte, 11, 460, 503, NumberFormat.getCurrencyInstance(Locale.US).format(offeringSummary.getTotal()));
+		printText(pageContentByte, 11, 460, 494, NumberFormat.getCurrencyInstance(Locale.US).format(offeringSummary.getTotal()));
 	}
 
 }

@@ -24,7 +24,7 @@ public class ExpenditureReportService extends ReportFileInfo {
 
 	public String getExpenditureReport(ReportParam param) {
 		log.info("ExpenditureReport Generate");
-		deleteOneDayOldReport(exp_matcher);
+		deleteOneHourOldReport(exp_matcher);
 
 		List<Expenditure> list = null;
 		
@@ -37,7 +37,7 @@ public class ExpenditureReportService extends ReportFileInfo {
 							param.getFromDate(), param.getToDate());
 		}
 		
-		String fileName = OFF_RPT_FILE + System.currentTimeMillis() + ".csv";
+		String fileName = EXP_RPT_FILE + System.currentTimeMillis() + ".csv";
 
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));

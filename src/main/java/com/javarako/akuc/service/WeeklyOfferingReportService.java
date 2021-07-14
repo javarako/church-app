@@ -38,7 +38,7 @@ public class WeeklyOfferingReportService extends ReportFileInfo {
 	ReferenceCodeRepository referenceCodeRepository;
 
 	public String getWeeklyOfferingReport(Date start, Date end) {
-		deleteOneDayOldReport(off_matcher);
+		deleteOneHourOldReport(off_matcher);
 
 		List<Offering> list = offeringRepository.findByOfferingSundayBetweenOrderByOfferingSundayAscOfferingNumberAsc(start, end);
 		
@@ -81,7 +81,7 @@ public class WeeklyOfferingReportService extends ReportFileInfo {
 
 	public String getWeeklyOfferingReport(Date offeringSunday) {
 		try {
-			deleteOneDayOldReport(pdf_weekly_off_matcher);
+			deleteOneHourOldReport(pdf_weekly_off_matcher);
 			baseFont = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
 		} catch (Exception e) {
 			log.error(e.getMessage());

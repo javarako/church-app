@@ -8,8 +8,6 @@ import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
@@ -19,6 +17,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class ReportFileInfo {
 
+	public static final String EXCEL_EXT = ".xlsx";
+	public static final String TEMPLATE_NAME = "Financial_Report_2021";
+	public static final String TEMPLATE_FILE = "/" + TEMPLATE_NAME + EXCEL_EXT;
+	public static final String GEN_FILE = TEMPLATE_NAME + "GEN_";
+
+	public static final String GEN_FILE_PATTERN = GEN_FILE + "*.xlsx";
+	public static final Path rootPath = Paths.get("./");
+	public static final PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + GEN_FILE_PATTERN);
+
+	public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	public static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+	
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 	public static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public static final SimpleDateFormat DATE_yyyy_FORMAT = new SimpleDateFormat("yyyy");
@@ -37,7 +48,6 @@ public abstract class ReportFileInfo {
 	public static final PathMatcher tax_matcher = FileSystems.getDefault().getPathMatcher("glob:" + PDF_OFF_TAX_GEN_FILE + "*");
 	
 	public static final String PDF_WEEKLY_OFF_GEN_PATTERN = PDF_WEEKLY_OFF_GEN_FILE + "*.pdf";
-	public static final Path rootPath = Paths.get("./");
 	public static final PathMatcher pdf_weekly_off_matcher = FileSystems.getDefault().getPathMatcher("glob:" + PDF_WEEKLY_OFF_GEN_PATTERN);
 	
 	public static final int FONT_SIZE_11 = 11;
@@ -46,19 +56,18 @@ public abstract class ReportFileInfo {
 	// Create BaseFont instance.
 	public BaseFont baseFont;
 
-	public void deleteOneDayOldReport(PathMatcher matcher) {
+	public void deleteOneHourOldReport(PathMatcher matcher) {
 		try {
-			List<File> reports = Files.walk(rootPath).filter(f -> matcher.matches(f.getFileName())).map(Path::toFile)
-					.collect(Collectors.toList());
+			long oneDayOld = new Date().getTime() - (60 * 60 * 1000);
 
-			long oneDayOld = new Date().getTime() - (24 * 60 * 60 * 1000);
-
-			reports.forEach(f -> {
-				if (f.lastModified() < oneDayOld)
-					f.deleteOnExit();
-			});
+			Files.walk(rootPath).filter(f -> matcher.matches(f.getFileName()))
+				.map(Path::toFile)
+				.filter(f -> f.lastModified() < oneDayOld)
+				.peek(System.out::println)
+				.forEach(File::delete);
+			
 		} catch (Exception e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			log.error(e.getMessage());
 		}
 	}
