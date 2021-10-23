@@ -36,7 +36,7 @@ import lombok.ToString;
         name="MonthlyOfferingAmount",
         query="select type, month, sum(amount) as subtotal, row_position as rowPosition from " + 
         		"(SELECT o.offering_type as type, MONTH(o.offering_sunday) as month, YEAR(o.offering_sunday) as year, o.amount " + 
-        		"FROM offering o where o.offering_sunday >= ? and o.offering_sunday <= ?) as income, account_code ac" +
+        		"FROM offering o where o.offering_sunday >= ? and o.offering_sunday <= ?) as income, account_code ac " +
         		"where income.type = ac.code group by type, month",
         resultSetMapping = "MonthlyAmountResult"
 )
