@@ -34,9 +34,10 @@ import lombok.ToString;
 
 @NamedNativeQuery(
         name="MonthlyOfferingAmount",
-        query="select type, month, sum(amount) as subtotal, null as rowPosition from " + 
+        query="select type, month, sum(amount) as subtotal, row_position as rowPosition from " + 
         		"(SELECT o.offering_type as type, MONTH(o.offering_sunday) as month, YEAR(o.offering_sunday) as year, o.amount " + 
-        		"FROM offering o where o.offering_sunday >= ? and o.offering_sunday <= ?) as income group by type, month",
+        		"FROM offering o where o.offering_sunday >= ? and o.offering_sunday <= ?) as income, account_code ac" +
+        		"where income.type = ac.code group by type, month",
         resultSetMapping = "MonthlyAmountResult"
 )
 
@@ -44,7 +45,8 @@ import lombok.ToString;
         name="MonthlyExpenditureAmount",
         query="select type, month, sum(amount) as subtotal, row_position as rowPosition from " + 
         		"(SELECT e.code as type, MONTH(e.request_date) as month, YEAR(e.request_date) as year, e.amount " + 
-        		"FROM expenditure e where e.request_date >= ? and e.request_date <= ?) as exp, account_code ac where exp.type = ac.code group by type, month",
+        		"FROM expenditure e where e.request_date >= ? and e.request_date <= ?) as exp, account_code ac " +
+        		"where exp.type = ac.code group by type, month",
         resultSetMapping = "MonthlyAmountResult"
 )
 

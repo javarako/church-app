@@ -35,6 +35,7 @@ public class FinancialReportService extends ReportFileInfo{
 
 	private short cellNumberFormat;
 
+	/***
 	public static Map<String, Integer> position = new HashMap<>();
 	static {
 		position.put("Weekly", 5);
@@ -54,11 +55,13 @@ public class FinancialReportService extends ReportFileInfo{
 		position.put("Visitor", 19);
 		position.put("Summer_Camp", 20);
 		position.put("KL_Grant", 23);
-		position.put("UC_Grant", 25);
+		position.put("UC_Grant_Refugee", 24);
+		position.put("UC_Grant_Other", 25);
 		position.put("Designated", 26);
 		position.put("Trustee", 31);
 	}
-
+	***/
+	
 	@Autowired
 	MonthlyAmountDao monthlyAmountDao;
 	@Autowired
@@ -124,14 +127,14 @@ public class FinancialReportService extends ReportFileInfo{
 
 			totalInSystem += monthlyAmount.getSubtotal() == null ? 0L : monthlyAmount.getSubtotal();
 
-			Integer rowPosition = position.get(monthlyAmount.getType());
-			if (rowPosition == null || monthlyAmount.getMonth() == null || monthlyAmount.getSubtotal() == null) {
+			if (monthlyAmount.getRowPosition() == null || monthlyAmount.getMonth() == null
+					|| monthlyAmount.getSubtotal() == null) {
 				continue;
 			}
 
-			Cell cell = sheetAt.getRow(rowPosition).createCell(6 + monthlyAmount.getMonth());
+			Cell cell = sheetAt.getRow(monthlyAmount.getRowPosition()).createCell(6 + monthlyAmount.getMonth());
 			CellUtil.setCellStyleProperty(cell, CellUtil.DATA_FORMAT, cellNumberFormat);
-			cell.setCellValue(monthlyAmount.getSubtotal());
+			cell.setCellValue(cell.getNumericCellValue() + monthlyAmount.getSubtotal());
 		}
 
 		// Total in system
