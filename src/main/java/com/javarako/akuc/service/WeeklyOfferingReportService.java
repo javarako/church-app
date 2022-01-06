@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +38,17 @@ public class WeeklyOfferingReportService extends ReportFileInfo {
 	@Autowired
 	ReferenceCodeRepository referenceCodeRepository;
 
-	public String getWeeklyOfferingReport(Date start, Date end) {
+	public String getWeeklyOfferingReport(Date start, Date end, boolean allMember, int offeringNumber) {
 		deleteOneHourOldReport(off_matcher);
 
-		List<Offering> list = offeringRepository.findByOfferingSundayBetweenOrderByOfferingSundayAscOfferingNumberAsc(start, end);
+		List<Offering> list = new ArrayList<>();
+		if (!allMember && offeringNumber > 0) {
+			list = offeringRepository.findByOfferingNumberAndOfferingSundayBetweenOrderByOfferingSundayAsc(
+					Long.valueOf(offeringNumber), start, end);
+		}
+		else {
+			list = offeringRepository.findByOfferingSundayBetweenOrderByOfferingSundayAscOfferingNumberAsc(start, end);
+		}
 		
 		String fileName = OFF_RPT_FILE + System.currentTimeMillis() + ".csv";
 

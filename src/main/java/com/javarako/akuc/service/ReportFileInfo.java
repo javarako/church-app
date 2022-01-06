@@ -37,7 +37,7 @@ public abstract class ReportFileInfo {
 	
 	public static final String PDF_WEEKLY_OFF_FILE = "WeeklyOfferingReport";
 	public static final String PDF_WEEKLY_OFF_GEN_FILE = PDF_WEEKLY_OFF_FILE + "GEN_";
-	public static final String PDF_OFF_TAX_FILE = "ContributionStatement";
+	public static final String PDF_OFF_TAX_FILE = "TKUCContributionStatement";
 	public static final String PDF_OFF_TAX_GEN_FILE = PDF_OFF_TAX_FILE + "GEN_";
 	
 	public static final String EXP_RPT_FILE = "Expenditure_Report_";

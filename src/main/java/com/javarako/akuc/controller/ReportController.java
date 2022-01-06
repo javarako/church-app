@@ -56,7 +56,8 @@ public class ReportController {
 	public ResponseEntity<Resource> getWeeklyOfferingAmount(@RequestBody ReportParam param) {
 
 		try {
-			String fileName = weeklyOfferingReportService.getWeeklyOfferingReport(param.getFromDate(), param.getToDate());
+			String fileName = weeklyOfferingReportService.getWeeklyOfferingReport(
+					param.getFromDate(), param.getToDate(), param.isAllMember(), param.getOfferingNo());
 
 			File file = new File(fileName);
 			log.info("{} exists():{}", fileName, file.exists());
