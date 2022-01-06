@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public abstract class ReportFileInfo {
 
 	public static final String EXCEL_EXT = ".xlsx";
-	public static final String TEMPLATE_NAME = "Financial_Report_2021";
+	public static final String TEMPLATE_NAME = "Financial_Report_2022";
 	public static final String TEMPLATE_FILE = "/" + TEMPLATE_NAME + EXCEL_EXT;
 	public static final String GEN_FILE = TEMPLATE_NAME + "GEN_";
 

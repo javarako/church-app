@@ -30,35 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FinancialReportService extends ReportFileInfo{
 
-
 	private short cellNumberFormat;
-
-	/***
-	public static Map<String, Integer> position = new HashMap<>();
-	static {
-		position.put("Weekly", 5);
-		position.put("MS_fund", 6);
-		position.put("Loose", 7);
-		position.put("Thanks", 8);
-		position.put("Tithe", 9);
-		position.put("Easter", 10);
-		position.put("Anniversary", 11);
-		position.put("Thanksgiving", 12);
-		position.put("Christmas", 13);
-		position.put("Canvass", 14);
-		position.put("Initial", 15);
-		position.put("Group_Contr", 16);
-		position.put("Miscellaneous", 17);
-		position.put("Fellowship", 18);
-		position.put("Visitor", 19);
-		position.put("Summer_Camp", 20);
-		position.put("KL_Grant", 23);
-		position.put("UC_Grant_Refugee", 24);
-		position.put("UC_Grant_Other", 25);
-		position.put("Designated", 26);
-		position.put("Trustee", 31);
-	}
-	***/
 	
 	@Autowired
 	MonthlyAmountDao monthlyAmountDao;
