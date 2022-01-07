@@ -16,7 +16,7 @@ public interface ExpenditureRepository extends JpaRepository<Expenditure, Long> 
 	Page<Expenditure> findByRequestDateBetweenOrderByRequestDateDescIdDesc(Date start, Date end, Pageable pageable);
 	Page<Expenditure> findByAccountCodeCommitteeCodeAndRequestDateBetweenOrderByRequestDateDescIdDesc(String committeeCode, Date start, Date end, Pageable pageable);
 
-	@Query("SELECT exp FROM Expenditure exp WHERE exp.requestDate >= ?1 and exp.requestDate <= ?2 "
+	@Query("SELECT exp FROM Expenditure exp WHERE exp.requestDate <= ?1 "
 			+ "and exp.chequeNo is not null and exp.chequeClear = false order by exp.requestDate")
-	List<Expenditure> findOutstandingCheque(Date start, Date end);
+	List<Expenditure> findOutstandingCheque(Date end);
 }

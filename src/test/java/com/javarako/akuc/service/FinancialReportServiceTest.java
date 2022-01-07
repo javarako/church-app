@@ -1,34 +1,71 @@
 package com.javarako.akuc.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import javax.sql.DataSource;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.javarako.akuc.exception.ApiResponseException;
 
 import lombok.extern.slf4j.Slf4j;
 
+@SpringBootTest
 @Slf4j
 public class FinancialReportServiceTest {
 
-	public FinancialReportServiceTest() {
-		// TODO Auto-generated constructor stub
+	@Autowired
+	DataSource dataSource;
+
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	FinancialReportService financialReportService;
+	
+	@Test
+	public void dummyTest() {
+		assertThat(true).isTrue();
+	}
+	
+	//@Test
+	public void financialReportServiceTest() {
+		Calendar from = new GregorianCalendar(2022, 0, 1);
+		Calendar to = new GregorianCalendar(2022, 0, 31);
+		
+		try {
+			String fileName = financialReportService.getFinancialReport(from.getTime(), to.getTime());
+			assertThat(fileName).isNotNull();
+			
+			File file = new File(fileName);
+			log.info("{} exists():{}", fileName, file.exists());
+
+		} catch (Exception e) {
+			// e.printStackTrace();
+			log.error(e.getMessage());
+			throw new ApiResponseException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
     public static void main(String[] args) {
-        String excelFilePath = "C:\\Works\\projects\\church-app\\src\\test\\resources\\Financial_Report_Template_2021.xlsx";
+        String excelFilePath = "C:\\Works\\projects\\church-app\\src\\test\\resources\\Financial_Report_Template_2022.xlsx";
          
         try {
             FileInputStream inputStream = new FileInputStream(new File(excelFilePath));

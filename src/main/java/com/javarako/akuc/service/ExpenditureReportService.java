@@ -29,8 +29,7 @@ public class ExpenditureReportService extends ReportFileInfo {
 		List<Expenditure> list = null;
 		
 		if ("Outstanding_Cheque".equalsIgnoreCase(param.getType())) {
-			list = expenditureRepository.
-					findOutstandingCheque(param.getFromDate(), param.getToDate());
+			list = expenditureRepository.findOutstandingCheque(param.getToDate());
 		} else {
 			list = expenditureRepository.
 					findByRequestDateBetweenOrderByRequestDateAscAccountCodeCodeAsc(
