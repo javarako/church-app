@@ -43,11 +43,25 @@ public class OfferingWeeklyReportServiceTest {
 	}
 
 	public static void main(String[] args) {
-		OfferingWeeklyReportServiceTest test = new OfferingWeeklyReportServiceTest();
+		printNumberRightAlign();
+		
+		//OfferingWeeklyReportServiceTest test = new OfferingWeeklyReportServiceTest();
 		//test.updatePDF1();
-		test.findFiles();
+		//test.findFiles();
 	}
 
+	public static void printNumberRightAlign() {
+		System.out.println(String.format("%d", 201).replace(' ', '.'));
+		System.out.println(String.format("%10.2f", 20.0F).replace(' ', '.'));
+		System.out.println(String.format("%10.2f", 20567.0F).replace(' ', '.'));
+		System.out.println(String.format("%10.2f", 2023.0F).replace(' ', '.'));
+        String arr[] = {"Abraham", "Best Friend"};
+        for(String s:arr)
+            System.out.println(String.format("%-"+32+"s", s).replaceAll("\\s(?=\\s+$|$)", ".")+"OK");
+
+	}
+	
+	
 	public void findFiles() {
 		ClassLoader cl = this.getClass().getClassLoader();
 		ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver(cl);

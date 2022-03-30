@@ -37,6 +37,23 @@ public class WeeklyOfferingReportService extends ReportFileInfo {
 	DepositDetailRepository depositDetailRepository;
 	@Autowired
 	ReferenceCodeRepository referenceCodeRepository;
+	
+	private static String DEPOSIT_DETAIL = "[Bank deposit detail]";
+	private static String AMOUNT_TOTAL = "Amount total";
+	private static String CHEQUE_TOTAL = "Cheque total";
+	private static String US_CHEQUE_TOTAL = "US cheque total";
+	private static String CASH_TOTAL = "Cash total";
+	private static String US_CASH_TOTAL = "US Cash total";
+	private static String BILL_100 = "$100 X %d";
+	private static String BILL_50 = "_$50 X %d";
+	private static String BILL_20 = "_$20 X %d";
+	private static String BILL_10 = "_$10 X %d";
+	private static String BILL_5 = "__$5 X %d";
+	private static String COIN_OUT = "Coin out";
+	private static String COIN_IN = "Coin change in";
+	
+	private static String OFFERING_AMOUNT_DETAIL = "[Offering detail by amount type]";
+	private static String OFFERING_TYPE_DETAIL = "[Offering detail by type]";
 
 	public String getWeeklyOfferingReport(Date start, Date end, boolean allMember, int offeringNumber) {
 		deleteOneHourOldReport(off_matcher);
@@ -172,77 +189,65 @@ public class WeeklyOfferingReportService extends ReportFileInfo {
 
 		int y = 580;
 		// DepositDetail
-		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format("[Bank deposit detail]"));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, DEPOSIT_DETAIL);
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, "Amount total");
-		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", total));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, getFormattedLine(AMOUNT_TOTAL, total));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, "Cheque total");
-		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", depositDetail.getChequeTotal()));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, getFormattedLine(CHEQUE_TOTAL, depositDetail.getChequeTotal()));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, "US cheque total");
-		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", depositDetail.getUsChequeTotal()));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, getFormattedLine(US_CHEQUE_TOTAL, depositDetail.getUsChequeTotal()));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, "Cash total");
-		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", cash));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, getFormattedLine(CASH_TOTAL,cash));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, "US cash total");
-		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", depositDetail.getUsCashTotal()));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, getFormattedLine(US_CASH_TOTAL, depositDetail.getUsCashTotal()));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format("$100 X %3d", depositDetail.getBill100()));
-		printText(pageContentByte, FONT_SIZE_11, 180, y,
-				String.format("%7.2f", (double) (100 * depositDetail.getBill100())));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, 
+				getFormattedLine(String.format(BILL_100, depositDetail.getBill100()),  (double) (100 * depositDetail.getBill100())));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format(" $50 X %3d", depositDetail.getBill050()));
-		printText(pageContentByte, FONT_SIZE_11, 180, y,
-				String.format("%7.2f", (double) (50 * depositDetail.getBill050())));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, 
+				getFormattedLine(String.format(BILL_50, depositDetail.getBill050()),  (double) (50 * depositDetail.getBill050())));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format(" $20 X %3d", depositDetail.getBill020()));
-		printText(pageContentByte, FONT_SIZE_11, 180, y,
-				String.format("%7.2f", (double) (20 * depositDetail.getBill020())));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, 
+				getFormattedLine(String.format(BILL_20, depositDetail.getBill020()),  (double) (20 * depositDetail.getBill020())));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format(" $10 X %3d", depositDetail.getBill010()));
-		printText(pageContentByte, FONT_SIZE_11, 180, y,
-				String.format("%7.2f", (double) (10 * depositDetail.getBill010())));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, 
+				getFormattedLine(String.format(BILL_10, depositDetail.getBill010()),  (double) (10 * depositDetail.getBill010())));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format("  $5 X %3d", depositDetail.getBill005()));
-		printText(pageContentByte, FONT_SIZE_11, 180, y,
-				String.format("%7.2f", (double) (5 * depositDetail.getBill005())));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, 
+				getFormattedLine(String.format(BILL_5, depositDetail.getBill005()),  (double) (5 * depositDetail.getBill005())));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, "Coin out");
-		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", (double) depositDetail.getCoinOut()));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, getFormattedLine(COIN_OUT, depositDetail.getCoinOut()));
 		y -= LINE_SPACE_15;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, "Coin change in");
-		printText(pageContentByte, FONT_SIZE_11, 180, y, String.format("%7.2f", (double) depositDetail.getCoinIn()));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, getFormattedLine(COIN_IN, depositDetail.getCoinIn()));
 	}
 
+	private String getFormattedLine(String item, double amount) {
+		return String.format("%-"+40+"s", item).replaceAll("\\s(?=\\s+$|$)", ".")
+				+ String.format("%8.2f", amount).replace(' ', '.');
+	}
+    
 	private void printSummary(PdfContentByte pageContentByte, Map<String, Double> offeringSummary) {
-		int typeMaxLength = 35;
 		int y = 350;
-		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format("[Offering detail by amount type]"));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, OFFERING_AMOUNT_DETAIL);
 
 		// AMOUNT_TYPE
 		for (ReferenceCode x : referenceCodeRepository.findByType("AMOUNT_TYPE")) {
 			Double amount = offeringSummary.get(x.getValue());
 			if (amount != null) {
 				y -= LINE_SPACE_15;
-				int space = typeMaxLength - x.getViewValue().trim().length();
-				printText(pageContentByte, FONT_SIZE_11, 80, y,
-						String.format("%-" + space + "s %7.2f", x.getViewValue().trim(), amount));
+				printText(pageContentByte, FONT_SIZE_11, 80, y, getFormattedLine(x.getViewValue().trim(),amount));
 			}
 		}
 
 		y -= (LINE_SPACE_15 * 2);
-		printText(pageContentByte, FONT_SIZE_11, 80, y, String.format("[Offering detail by type]"));
+		printText(pageContentByte, FONT_SIZE_11, 80, y, OFFERING_TYPE_DETAIL);
 
 		// OFFERING_TYPE
 		for (ReferenceCode x : referenceCodeRepository.findByType("OFFERING_TYPE")) {
 			Double amount = offeringSummary.get(x.getValue());
 			if (amount != null) {
 				y -= LINE_SPACE_15;
-				int space = typeMaxLength - x.getViewValue().trim().length();
-				printText(pageContentByte, FONT_SIZE_11, 80, y,
-						String.format("%-" + space + "s %7.2f", x.getViewValue().trim(), amount));
+				printText(pageContentByte, FONT_SIZE_11, 80, y, getFormattedLine(x.getViewValue().trim(),amount));
 			}
 		}
 
