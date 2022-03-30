@@ -144,7 +144,7 @@ public class FinancialReportService extends ReportFileInfo{
 					.mapToDouble(x -> x.getAmount())
 					.sum();
 		
-		Cell cell = sheetAt.getRow(17).createCell(3);
+		Cell cell = sheetAt.getRow(18).createCell(3);
 		CellUtil.setCellStyleProperty(cell, CellUtil.DATA_FORMAT, cellNumberFormat);
 		cell.setCellValue(outstandingCheques);
 	}
