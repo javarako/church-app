@@ -8,12 +8,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.BaseFont;
@@ -27,6 +29,7 @@ import com.javarako.akuc.entity.OfferingSummary;
 import com.javarako.akuc.exception.ApiResponseException;
 import com.javarako.akuc.repository.MemberRepository;
 import com.javarako.akuc.repository.OfferingSummaryDao;
+import com.javarako.akuc.util.AddressType;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -186,14 +189,28 @@ public class OfferingTaxReceiptService extends ReportFileInfo {
 	{
 		String year = DATE_yyyy_FORMAT.format(start);
 		String number = String.format("%03d", offeringSummary.getOfferingNumber());
-		Address address = member.getAddresses().iterator().next();
+		Optional<Address> addressOpt = member.getAddresses()
+				.stream()
+				.filter(x -> x.getType() == AddressType.CRA)
+				.findAny();
+		
+		Address address = null;
+		
+		if (addressOpt.isPresent()) {
+			address = addressOpt.get();
+		} else {
+			address = member.getAddresses().iterator().next();
+		}
 				
 		//year
 		printText(pageContentByte, 15, 184, 659, year);
 		
+		String printingName = StringUtils.isEmpty(member.getCraName()) ?
+				member.getName() + (Strings.isEmpty(member.getSpouseName()) ? "" : " & "+member.getSpouseName())
+				: member.getCraName();
+				
 		//Name
-		printText(pageContentByte, 11, 93, 633, 
-				member.getName() + (Strings.isEmpty(member.getSpouseName()) ? "" : " & "+member.getSpouseName()) );
+		printText(pageContentByte, 11, 93, 633, printingName);
 		//Address
 		printText(pageContentByte, 11, 93, 620, address.getAddress1());
 		//City

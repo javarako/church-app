@@ -31,6 +31,7 @@ public class Member extends AuditModel {
 
 	private String name;
 	private String nickName;
+	private String craName;
 	private String spouseName;
 	private String spouseNickName;
 	private String password;
