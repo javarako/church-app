@@ -156,7 +156,7 @@ public class OfferingTaxReceiptService extends ReportFileInfo {
 					++page;
 					continue;
 				}
-				log.info("OfferingTaxReceipt generating of No.", offeringSummary.getOfferingNumber());
+				log.info("OfferingTaxReceipt generating of No. {}", offeringSummary.getOfferingNumber());
 				
 				Member member = memberMap.get(offeringSummary.getOfferingNumber());
 				if (member == null) {
@@ -191,7 +191,7 @@ public class OfferingTaxReceiptService extends ReportFileInfo {
 		String number = String.format("%03d", offeringSummary.getOfferingNumber());
 		Optional<Address> addressOpt = member.getAddresses()
 				.stream()
-				.filter(x -> x.getType() == AddressType.CRA)
+				.filter(x -> x.getType() == AddressType.TAX)
 				.findAny();
 		
 		Address address = null;
