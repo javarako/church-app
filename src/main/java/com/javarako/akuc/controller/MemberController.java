@@ -25,10 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javarako.akuc.entity.ActionRecord;
 import com.javarako.akuc.entity.Member;
 import com.javarako.akuc.exception.ApiResponseException;
+import com.javarako.akuc.repository.ActionRecordRepository;
 import com.javarako.akuc.repository.MemberRepository;
 import com.javarako.akuc.repository.OfferingArchiveRepository;
+import com.javarako.akuc.util.ActionType;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,6 +45,8 @@ public class MemberController {
 	MemberRepository memberRepository;
 	@Autowired
 	OfferingArchiveRepository offeringArchiveRepository;
+	@Autowired
+	ActionRecordRepository actionRecordRepository;
 	
 	@GetMapping("/members")
 	@PreAuthorize("hasRole('ROLE_USER')")
@@ -93,7 +98,7 @@ public class MemberController {
 		
 		//SimpleDateFormat yyyyMMDD = new SimpleDateFormat("yyyyMMdd");
 		//offeringArchiveRepository.getOfferingArchiving(offeringNumber, yyyyMMDD.format(start.getTime()), yyyyMMDD.format(end.getTime()));
-		offeringArchiveRepository.getOfferingArchiving(offeringNumber, start.getTime(), end.getTime());
+		offeringArchiveRepository.offeringArchiving(offeringNumber, start.getTime(), end.getTime());
 	}
 
 	@PostMapping("/members")
@@ -104,10 +109,17 @@ public class MemberController {
 
 	@PutMapping("/members/{id}")
 	public Member update(@PathVariable("id") long id, @RequestBody Member member) {
+		
+		recordHistory(id, ActionType.MOD);
+		
+		member.setMemberId(id);
+		return memberRepository.save(member);
+		/***
 		return memberRepository.findById(id).map(existingMember -> {
 			member.setMemberId(existingMember.getMemberId());
 			return memberRepository.save(member);
 		}).orElseThrow(() -> new ApiResponseException(id + " not found!", HttpStatus.NOT_FOUND));
+		***/
 	}
 
 	@PutMapping("/members/offeringNumber")
@@ -122,16 +134,39 @@ public class MemberController {
 			}
 		}
 
+		recordHistory(member.getMemberId(), ActionType.OFF_NO);
+		
 		return memberRepository.save(member);
 	}
 
 	@DeleteMapping("/members/{id}")
 	@PreAuthorize("hasRole('ROLE_MEMBERSHIP')")
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") long id) {
+		
+		recordHistory(id, ActionType.DEL);
+		
 		memberRepository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	private void recordHistory(long id, ActionType action) {
+		
+		Member member = memberRepository.findById(id).map(existing -> {
+			return existing;
+		}).orElseThrow(() -> new ApiResponseException(id + " not found!", HttpStatus.NOT_FOUND));
+		
+		if (ActionType.DEL == action && member.getOfferingNumber() != null) {
+			offeringArchiveRepository.offeringArchivingById(member.getOfferingNumber());
+		}
+		
+		ActionRecord record = new ActionRecord();
+		record.setAction(action);
+		record.setTableName(Member.class.getSimpleName());
+		record.setContent(member.toString());
+		
+		actionRecordRepository.save(record);
+	}
+	
 	@DeleteMapping("/members")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<HttpStatus> deleteAll() {

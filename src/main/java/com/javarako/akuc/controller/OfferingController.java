@@ -103,29 +103,35 @@ public class OfferingController {
 	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public Offering update(@PathVariable("id") long id, @RequestBody Offering offering) {
 
+		recordHistory(id, ActionType.DEL);
+		
+		offering.setId(id);
+		return offeringRepository.save(offering);
+		/***
 		return offeringRepository.findById(id).map(existingOffering -> {
 			offering.setId(existingOffering.getId());
 			return offeringRepository.save(offering);
 		}).orElseThrow(() -> new ApiResponseException(id + " not found!", HttpStatus.NOT_FOUND));
+		***/
 	}
 	
 	@DeleteMapping("/offerings/{id}")
 	@PreAuthorize("hasRole('ROLE_TREASURER')")
 	public ResponseEntity<HttpStatus> delete(@PathVariable("id") long id) {
 
-		recordDeleteHistory(id);
+		recordHistory(id, ActionType.DEL);
 		offeringRepository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	private void recordDeleteHistory(long id) {
+	private void recordHistory(long id, ActionType action) {
 		
 		Offering offering = offeringRepository.findById(id).map(existingOffering -> {
 			return existingOffering;
 		}).orElseThrow(() -> new ApiResponseException(id + " not found!", HttpStatus.NOT_FOUND));
 		
 		ActionRecord record = new ActionRecord();
-		record.setAction(ActionType.DEL);
+		record.setAction(action);
 		record.setTableName(Offering.class.getSimpleName());
 		record.setContent(offering.toString());
 		
