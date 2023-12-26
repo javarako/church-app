@@ -44,6 +44,7 @@ public class ExpenditureController {
 	@GetMapping("/expenditures")
 	public ResponseEntity<Map<String, Object>> get(
 			@RequestParam(required = false) String committee,
+			@RequestParam(required = false) Boolean chequePending,
 			@RequestParam(required = false) Date beginDate,
 			@RequestParam(required = false) Date endDate,
 			@RequestParam(defaultValue = "0") int page, 
@@ -59,12 +60,16 @@ public class ExpenditureController {
 			beginDate = januaryFirst.getTime();
 		}
 		
-		log.info("/expenditures?committeeCode={}, startDate={}, endDate={}", committee,beginDate,endDate);
+		log.info("/expenditures?committeeCode={}, chequePending={}, startDate={}, endDate={}", committee,chequePending,beginDate,endDate);
 
 		try {
 			Pageable pageable = PageRequest.of(page, size, Sort.by("requestDate").descending());
 			Page<Expenditure> expenditures = null;
-			if (Strings.isEmpty(committee)) {
+			
+			if (chequePending) {
+				expenditures = expenditureRepository.
+						findBychequeNoNotNullAndChequeClearAndRequestDateBetweenOrderByRequestDateDescIdDesc(false, beginDate, endDate, pageable);
+			} else if (Strings.isEmpty(committee)) {
 				expenditures = expenditureRepository.
 						findByRequestDateBetweenOrderByRequestDateDescIdDesc(beginDate, endDate, pageable);
 			} else {
