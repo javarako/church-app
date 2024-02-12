@@ -17,10 +17,12 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.javarako.akuc.entity.Expenditure;
 import com.javarako.akuc.entity.MonthlyAmount;
+import com.javarako.akuc.exception.ApiResponseException;
 import com.javarako.akuc.repository.ExpenditureRepository;
 import com.javarako.akuc.repository.MonthlyAmountDao;
 
@@ -38,6 +40,15 @@ public class FinancialReportService extends ReportFileInfo{
 	ExpenditureRepository expenditureRepository;
 	
 	public String getFinancialReport(Date start, Date end) {
+		
+		if (isNotSameYearRange(start, end)) {
+			log.error(DATE_RANGE_ERROR);
+			throw new ApiResponseException(DATE_RANGE_ERROR, HttpStatus.BAD_REQUEST);
+		}
+		
+		if (isPastYear(start)) {
+			return "/" + this.TEMPLATE_NAME + "_" + start.getYear() + EXCEL_EXT;
+		}
 
 		String newFile = GEN_FILE + System.currentTimeMillis() + EXCEL_EXT;
 
@@ -148,6 +159,20 @@ public class FinancialReportService extends ReportFileInfo{
 		CellUtil.setCellStyleProperty(cell, CellUtil.DATA_FORMAT, cellNumberFormat);
 		cell.setCellValue(outstandingCheques);
 	}
-
+	
+	private boolean isNotSameYearRange(Date from, Date to) {
+		if ( from.getYear() == to.getYear() )
+			return false;
+		else 
+			return true;
+	}
+	
+	private boolean isPastYear(Date from) {
+		Date current = new Date();
+		if ( from.getYear() < current.getYear() )
+			return true;
+		else 
+			return false;
+	}
 
 }

@@ -135,7 +135,7 @@ public class ReportController {
 	public ResponseEntity<Resource> getMonthlyFinancialReport(@RequestBody ReportParam param) {
 		// Calendar end = new GregorianCalendar();
 		// Calendar start = new GregorianCalendar(end.get(Calendar.YEAR), 0, 1);
-		log.error(param.getFromDate().toString());
+		log.info(param.getFromDate().toString());
 
 		try {
 			String fileName = financialReportService.getFinancialReport(param.getFromDate(), param.getToDate());
@@ -150,6 +150,9 @@ public class ReportController {
 			// e.printStackTrace();
 			log.error(e.getMessage());
 			throw new ApiResponseException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (ApiResponseException ae) {
+			throw ae;
 		}
 	}
+
 }

@@ -52,6 +52,8 @@ public abstract class ReportFileInfo {
 	
 	public static final int FONT_SIZE_11 = 11;
 	public static final int LINE_SPACE_15 = 15;
+	
+	public static final String DATE_RANGE_ERROR = "Date range for a Financial report is allowed only same year!";
 
 	// Create BaseFont instance.
 	public BaseFont baseFont;
