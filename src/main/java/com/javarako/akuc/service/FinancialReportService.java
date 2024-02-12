@@ -47,7 +47,7 @@ public class FinancialReportService extends ReportFileInfo{
 		}
 		
 		if (isPastYear(start)) {
-			return "/" + this.TEMPLATE_NAME + "_" + start.getYear() + EXCEL_EXT;
+			return "/" + this.TEMPLATE_NAME + "_" + (1900+start.getYear()) + EXCEL_EXT;
 		}
 
 		String newFile = GEN_FILE + System.currentTimeMillis() + EXCEL_EXT;
