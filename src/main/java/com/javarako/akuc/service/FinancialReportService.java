@@ -1,5 +1,7 @@
 package com.javarako.akuc.service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,7 +49,7 @@ public class FinancialReportService extends ReportFileInfo{
 		}
 		
 		if (isPastYear(start)) {
-			return "archive/" + this.TEMPLATE_NAME + "_" + (1900+start.getYear()) + EXCEL_EXT;
+			return this.TEMPLATE_NAME + "_" + (1900+start.getYear()) + EXCEL_EXT;
 		}
 
 		String newFile = GEN_FILE + System.currentTimeMillis() + EXCEL_EXT;
@@ -55,7 +57,10 @@ public class FinancialReportService extends ReportFileInfo{
 		try {
 			deleteOneHourOldReport(matcher);
 
-			InputStream inputStream = getClass().getResourceAsStream(TEMPLATE_FILE);
+			File file = new File(TEMPLATE_FILE);
+			log.info("{} exists():{}", TEMPLATE_FILE, file.exists());
+			
+			InputStream inputStream = new FileInputStream(file);
 			Workbook workbook = new XSSFWorkbook(inputStream);
 
 			DataFormat format = workbook.createDataFormat();
