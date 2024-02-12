@@ -124,7 +124,7 @@ public class FinancialReportService extends ReportFileInfo{
 		}
 
 		// Total in system
-		Cell cell = sheetAt.getRow(34).createCell(6);
+		Cell cell = sheetAt.getRow(35).createCell(6);
 		CellUtil.setCellStyleProperty(cell, CellUtil.DATA_FORMAT, cellNumberFormat);
 		cell.setCellValue(totalInSystem);
 	}
